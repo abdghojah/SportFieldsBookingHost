@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title data-i18n="field.editField">Field Form - SportSpot</title>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        document.body.removeAttribute("hidden");
+      });
+    </script>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/field-form.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  </head>
+  <body hidden>
+    <div class="app-container">
+      <header class="main-header">
+        <div class="logo">
+          <a href="/"><h1>SportSpot</h1></a>
+        </div>
+        <nav class="main-nav">
+          <ul>
+            <li><a href="/place-fields.html" data-i18n="nav.myFields">My Fields</a></li>
+            <li><a href="#" id="logout-btn" data-i18n="nav.logout">Logout</a></li>
+            <li>
+              <select id="language-select">
+                <option value="en">English</option>
+                <option value="ar">العربية</option>
+              </select>
+            </li>
+          </ul>
+        </nav>
+      </header>
+
+      <main class="protected-content hidden">
+        <section class="field-form-section">
+          <h2 id="form-title" data-i18n="field.addField">Create a New Field</h2>
+          
+          <form id="field-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="field-name" data-i18n="field.name">Field Name</label>
+                <input type="text" id="field-name" name="fieldName" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="sport-type" data-i18n="field.sportType">Sport Type</label>
+                <select id="sport-type" name="sportType" required>
+                  <option value="" data-i18n="search.sportTypePlaceholder">Select Sport</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="included-services" data-i18n="field.includedServices">Included Services</label>
+              <textarea 
+                id="included-services" 
+                name="includedServices" 
+                placeholder="List free services included in the price (e.g., water, balls, changing rooms)"
+                rows="3"
+              ></textarea>
+            </div>
+            
+            <div class="form-group">
+              <label for="field-images" data-i18n="field.images">Field Images (Max 5 images, 2MB each, PNG/JPEG only)</label>
+              <input 
+                type="file" 
+                id="field-images" 
+                name="fieldImages" 
+                accept=".jpg,.jpeg,.png" 
+                multiple
+              >
+              <div id="image-preview" class="image-preview"></div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label for="city" data-i18n="search.city">City</label>
+                <select id="city" name="city" required>
+                  <option value="" data-i18n="search.cityPlaceholder">Select City</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label for="district" data-i18n="field.district">District</label>
+                <select id="district" name="district" required disabled>
+                  <option value="" data-i18n="field.districtPlaceholder">Select District</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label for="price" data-i18n="field.price">Price per Hour (JOD)</label>
+                <input 
+                  type="number" 
+                  id="price" 
+                  name="price" 
+                  min="1" 
+                  step="0.5" 
+                  required
+                >
+              </div>
+              
+              <div class="form-group">
+                <label for="min-time" data-i18n="field.minBookingTime">Minimum Booking Time (hours)</label>
+                <input 
+                  type="number" 
+                  id="min-time" 
+                  name="minTime" 
+                  min="1" 
+                  step="0.5" 
+                  required
+                >
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label data-i18n="field.location">Location</label>
+              <div id="map" class="map-container"></div>
+              <input type="hidden" id="latitude" name="latitude">
+              <input type="hidden" id="longitude" name="longitude">
+            </div>
+            
+            <div class="form-group">
+              <label data-i18n="field.blockedTimes">Blocked Time Intervals (Optional)</label>
+              <div id="time-blocks-container" class="time-blocks-container">
+                <div class="time-block">
+                  <div class="day-select">
+                    <label for="block-day-0">Day</label>
+                    <select id="block-day-0" name="blockDay[]">
+                      <option value="monday">Monday</option>
+                      <option value="tuesday">Tuesday</option>
+                      <option value="wednesday">Wednesday</option>
+                      <option value="thursday">Thursday</option>
+                      <option value="friday">Friday</option>
+                      <option value="saturday">Saturday</option>
+                      <option value="sunday">Sunday</option>
+                    </select>
+                  </div>
+                  <div class="time-range">
+                    <label>Time</label>
+                    <div class="time-inputs">
+                      <input type="time" id="block-from-0" name="blockFrom[]">
+                      <span>to</span>
+                      <input type="time" id="block-to-0" name="blockTo[]">
+                    </div>
+                  </div>
+                  <button type="button" class="btn btn-icon remove-time-block">
+                    <i class="icon-delete"></i>
+                  </button>
+                </div>
+              </div>
+              <button type="button" id="add-time-block" class="btn btn-secondary" data-i18n="field.addTimeBlock">Add Time Block</button>
+            </div>
+            
+            <div class="form-group">
+              <label for="time-pattern" data-i18n="field.timePattern">Time Pattern (Optional)</label>
+              <div class="time-pattern-container">
+                <div class="time-pattern-inputs">
+                  <div class="form-group">
+                    <label for="pattern-hours">Every</label>
+                    <input 
+                      type="number" 
+                      id="pattern-hours" 
+                      name="patternHours" 
+                      min="1" 
+                      step="0.5"
+                      placeholder="hours"
+                    >
+                  </div>
+                  <div class="form-group">
+                    <label for="pattern-start">Starting From</label>
+                    <input 
+                      type="time" 
+                      id="pattern-start" 
+                      name="patternStart"
+                    >
+                  </div>
+                </div>
+                <p class="helper-text">
+                  Example: "Every 2 hours starting from 4:00" means slots like 4:00-6:00, 6:00-8:00 are allowed,
+                  but 4:30-6:30 is not.
+                </p>
+              </div>
+            </div>
+            
+            <div class="form-actions">
+              <button type="submit" id="save-btn" class="btn btn-primary" data-i18n="common.save">Save</button>
+              <button type="button" id="view-reservations-btn" class="btn btn-secondary hidden" data-i18n="field.reservations">View Reservations</button>
+              <button type="button" id="delete-field-btn" class="btn btn-danger hidden" data-i18n="field.deleteField">Delete Field</button>
+            </div>
+          </form>
+        </section>
+      </main>
+      
+      <div id="reservations-modal" class="modal hidden">
+        <div class="modal-content modal-large">
+          <div class="modal-header">
+            <h3 data-i18n="field.reservations">Reservations</h3>
+            <button id="close-reservations-modal" class="btn btn-icon">
+              <i class="icon-close"></i>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="calendar-container">
+              <div id="reservations-calendar" class="reservations-calendar"></div>
+            </div>
+            <div class="reservations-list-container">
+              <h4>Reservations for <span id="selected-date"></span></h4>
+              <div id="reservations-list" class="reservations-list">
+                <p class="no-results" data-i18n="reservation.noReservations">No reservations for the selected date</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="delete-confirmation" class="modal hidden">
+        <div class="modal-content">
+          <h3 data-i18n="field.confirmDelete">Confirm Deletion</h3>
+          <p data-i18n="field.deleteWarning">Are you sure you want to delete this field? This action cannot be undone.</p>
+          <div class="modal-actions">
+            <button id="confirm-delete-btn" class="btn btn-danger" data-i18n="common.delete">Delete</button>
+            <button id="cancel-delete-btn" class="btn btn-secondary" data-i18n="common.cancel">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="logout-confirmation" class="modal hidden">
+        <div class="modal-content">
+          <h3 data-i18n="auth.confirmLogout">Confirm Logout</h3>
+          <p data-i18n="auth.logoutWarning">Are you sure you want to logout?</p>
+          <div class="modal-actions">
+            <button id="confirm-logout-btn" class="btn btn-primary" data-i18n="nav.logout">Logout</button>
+            <button id="cancel-logout-btn" class="btn btn-secondary" data-i18n="common.cancel">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="footer-content">
+          <p data-i18n="footer.copyright" data-i18n-options='{"year": "2025"}'>© 2025 SportSpot. All rights reserved.</p>
+        </div>
+      </footer>
+    </div>
+
+    <script type="module" src="/js/main.js"></script>
+    <script type="module" src="/js/field-form.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  </body>
+</html>

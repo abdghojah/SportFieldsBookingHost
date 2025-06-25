@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title data-i18n="nav.login">Owner Login - SportSpot</title>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        document.body.removeAttribute("hidden");
+      });
+    </script>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/auth.css" />
+  </head>
+  <body hidden>
+    <div class="app-container">
+      <header class="main-header">
+        <div class="logo">
+          <a href="/"><h1>SportSpot</h1></a>
+        </div>
+        <nav class="main-nav">
+          <ul>
+            <li><a href="/" data-i18n="nav.home">Home</a></li>
+            <li><a href="/contact.html" data-i18n="nav.contact">Contact Us</a></li>
+            <li>
+              <select id="language-select">
+                <option value="en">English</option>
+                <option value="ar">العربية</option>
+              </select>
+            </li>
+          </ul>
+        </nav>
+      </header>
+
+      <main>
+        <section class="auth-section">
+          <div class="auth-card">
+            <h2 data-i18n="nav.login">Owner Login</h2>
+            <div id="login-error" class="error-message hidden"></div>
+            <form id="login-form">
+              <div class="form-group">
+                <label for="identifier" data-i18n="auth.phone">Phone Number</label>
+                <input 
+                  type="tel" 
+                  id="identifier" 
+                  name="identifier" 
+                  placeholder="Enter phone number (07xxxxxxxx)" 
+                  pattern="07[0-9]{8}"
+                  required
+                >
+              </div>
+              <div class="form-group">
+                <label for="password" data-i18n="auth.password">Password</label>
+                <input 
+                  type="password" 
+                  id="password" 
+                  name="password" 
+                  placeholder="Enter your password" 
+                  required
+                >
+              </div>
+              <button type="submit" class="btn btn-primary btn-full" data-i18n="nav.login">Login</button>
+            </form>
+            <div class="auth-links">
+              <a href="/owner-signup.html" data-i18n="auth.noAccount">Don't have an account? Sign up</a>
+              <a href="/reset-password.html" data-i18n="auth.forgotPassword">Forgot Password?</a>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        <div class="footer-content">
+          <p data-i18n="footer.copyright" data-i18n-options='{"year": "2025"}'>© 2025 SportSpot. All rights reserved.</p>
+        </div>
+      </footer>
+    </div>
+
+    <script type="module" src="/js/main.js"></script>
+    <script type="module" src="/js/auth.js"></script>
+  </body>
+</html>
