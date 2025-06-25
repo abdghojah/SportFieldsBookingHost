@@ -1,0 +1,283 @@
+/* Hero Section */
+.hero {
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+              url('https://images.pexels.com/photos/46798/the-ball-stadion-football-the-pitch-46798.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+  background-size: cover;
+  background-position: center;
+  color: white;
+  text-align: center;
+  padding: var(--space-6) var(--space-3);
+  margin: -1.5rem;
+  margin-bottom: var(--space-4);
+  border-radius: 0;
+  position: relative;
+}
+
+.hero-content {
+  max-width: 800px;
+  margin: 0 auto;
+  animation: fadeIn var(--transition-slow) forwards;
+}
+
+.hero h2 {
+  font-size: var(--font-size-4xl);
+  margin-bottom: var(--space-2);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.hero p {
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--space-3);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Search Section */
+.search-section {
+  max-width: 900px;
+  margin: 0 auto var(--space-4);
+}
+
+.search-container {
+  background-color: var(--color-background);
+  border-radius: var(--border-radius-lg);
+  padding: var(--space-3);
+  box-shadow: var(--shadow-md);
+}
+
+.search-container h3 {
+  text-align: center;
+  margin-bottom: var(--space-3);
+  color: var(--color-text);
+}
+
+/* Place Search */
+.place-search {
+  margin-bottom: var(--space-3);
+}
+
+.place-search-input {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.place-search-input input {
+  flex: 1;
+}
+
+/* Search Separator */
+.search-separator {
+  display: flex;
+  align-items: center;
+  margin: var(--space-4) 0;
+  text-align: center;
+}
+
+.separator-line {
+  flex: 1;
+  height: 1px;
+  background-color: var(--color-divider);
+}
+
+.separator-text {
+  padding: 0 var(--space-2);
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+/* Field Search Form */
+#search-form {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-3);
+}
+
+#search-form .form-group:nth-child(4),
+#search-form .form-group:nth-child(5) {
+  grid-column: span 1;
+}
+
+#search-form button {
+  grid-column: span 3;
+  margin-top: var(--space-2);
+}
+
+/* Results Section */
+.results-section {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.results-section h3 {
+  text-align: center;
+  margin-bottom: var(--space-3);
+}
+
+/* Place Results */
+.place-results {
+  margin-bottom: var(--space-4);
+}
+
+.places-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--space-3);
+}
+
+.place-card {
+  background-color: var(--color-background);
+  border-radius: var(--border-radius-md);
+  padding: var(--space-3);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  cursor: pointer;
+}
+
+.place-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.place-card-header {
+  margin-bottom: var(--space-2);
+}
+
+.place-card-title {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: var(--color-primary);
+}
+
+.place-card-stats {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.place-card-stat {
+  background-color: var(--color-background-light);
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+/* Field Results */
+.search-results {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--space-3);
+}
+
+.field-card {
+  background-color: var(--color-background);
+  border-radius: var(--border-radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  cursor: pointer;
+}
+
+.field-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.field-card-image {
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+}
+
+.field-card-content {
+  padding: var(--space-2);
+}
+
+.field-card-header {
+  margin-bottom: var(--space-1);
+}
+
+.field-card-title {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.field-card-place {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.field-card-detail {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--space-1);
+}
+
+.field-card-sport {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  background-color: var(--color-primary-light);
+  color: white;
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
+}
+
+.field-card-prices {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+}
+
+.field-card-price-hour {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.field-card-price-total {
+  font-weight: 600;
+  color: var(--color-accent-dark);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .hero h2 {
+    font-size: var(--font-size-3xl);
+  }
+  
+  .hero p {
+    font-size: var(--font-size-lg);
+  }
+  
+  #search-form {
+    grid-template-columns: 1fr;
+  }
+  
+  #search-form .form-group:nth-child(4),
+  #search-form .form-group:nth-child(5) {
+    grid-column: span 1;
+  }
+  
+  #search-form button {
+    grid-column: span 1;
+  }
+  
+  .search-results {
+    grid-template-columns: 1fr;
+  }
+  
+  .place-search-input {
+    flex-direction: column;
+  }
+  
+  .place-search-input button {
+    width: 100%;
+  }
+  
+  .places-list {
+    grid-template-columns: 1fr;
+  }
+}

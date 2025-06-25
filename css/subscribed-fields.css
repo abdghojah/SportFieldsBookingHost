@@ -1,0 +1,272 @@
+/* Subscribed Fields Section */
+.subscribed-fields-section {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: var(--space-4);
+}
+
+/* View Toggle */
+.view-toggle {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-1);
+  margin-bottom: var(--space-3);
+}
+
+.view-toggle .btn {
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--border-radius-md);
+  transition: all var(--transition-fast);
+}
+
+.view-toggle .btn.active {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.view-toggle .btn:not(.active) {
+  background-color: var(--color-background-dark);
+  color: var(--color-text);
+}
+
+.view-toggle .btn:not(.active):hover {
+  background-color: var(--color-primary-light);
+  color: white;
+}
+
+/* View Containers */
+.view-container {
+  transition: opacity var(--transition-normal);
+}
+
+.view-container.hidden {
+  display: none;
+}
+
+/* List View */
+.places-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--space-3);
+}
+
+.place-card {
+  background-color: var(--color-background);
+  border-radius: var(--border-radius-md);
+  padding: var(--space-3);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  cursor: pointer;
+}
+
+.place-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.place-card-header {
+  margin-bottom: var(--space-2);
+}
+
+.place-card-title {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: var(--color-primary);
+}
+
+.place-card-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.place-card-stat {
+  background-color: var(--color-background-light);
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+/* Map View */
+.fields-map {
+  height: 600px;
+  width: 100%;
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-md);
+  position: relative;
+}
+
+/* Map Legend */
+.map-legend {
+  background-color: var(--color-background);
+  border-radius: var(--border-radius-md);
+  padding: var(--space-2);
+  box-shadow: var(--shadow-sm);
+  margin-top: var(--space-2);
+  max-width: 300px;
+}
+
+.map-legend h4 {
+  margin-bottom: var(--space-2);
+  color: var(--color-primary);
+  font-size: var(--font-size-md);
+}
+
+.legend-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--font-size-sm);
+}
+
+.legend-marker {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.legend-marker.football {
+  background-color: #4CAF50;
+}
+
+.legend-marker.tennis {
+  background-color: #FF9800;
+}
+
+.legend-marker.volleyball {
+  background-color: #2196F3;
+}
+
+.legend-marker.basketball {
+  background-color: #9C27B0;
+}
+
+.legend-marker.padel {
+  background-color: #F44336;
+}
+
+/* Custom Marker Cluster Styles */
+.marker-cluster-small {
+  background-color: rgba(30, 136, 229, 0.6);
+}
+
+.marker-cluster-small div {
+  background-color: rgba(30, 136, 229, 0.8);
+}
+
+.marker-cluster-medium {
+  background-color: rgba(255, 152, 0, 0.6);
+}
+
+.marker-cluster-medium div {
+  background-color: rgba(255, 152, 0, 0.8);
+}
+
+.marker-cluster-large {
+  background-color: rgba(244, 67, 54, 0.6);
+}
+
+.marker-cluster-large div {
+  background-color: rgba(244, 67, 54, 0.8);
+}
+
+/* Custom Popup Styles */
+.leaflet-popup-content {
+  margin: var(--space-2);
+  line-height: 1.4;
+}
+
+.popup-content {
+  min-width: 200px;
+}
+
+.popup-title {
+  font-weight: 600;
+  font-size: var(--font-size-lg);
+  color: var(--color-primary);
+  margin-bottom: var(--space-1);
+}
+
+.popup-place {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-1);
+}
+
+.popup-sport {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  background-color: var(--color-primary-light);
+  color: white;
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
+  margin-bottom: var(--space-1);
+}
+
+.popup-price {
+  font-weight: 500;
+  margin-bottom: var(--space-2);
+}
+
+.popup-button {
+  display: inline-block;
+  padding: var(--space-1) var(--space-2);
+  background-color: var(--color-primary);
+  color: white;
+  text-decoration: none;
+  border-radius: var(--border-radius-md);
+  font-size: var(--font-size-sm);
+  transition: background-color var(--transition-fast);
+}
+
+.popup-button:hover {
+  background-color: var(--color-primary-dark);
+  color: white;
+}
+
+/* Loading State */
+.loading {
+  text-align: center;
+  color: var(--color-text-secondary);
+  padding: var(--space-4);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .places-list {
+    grid-template-columns: 1fr;
+  }
+  
+  .fields-map {
+    height: 400px;
+  }
+  
+  .view-toggle {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .view-toggle .btn {
+    width: 200px;
+  }
+  
+  .legend-items {
+    justify-content: center;
+  }
+}

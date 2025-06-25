@@ -1,0 +1,124 @@
+/* Place Header */
+.place-header {
+  background-color: var(--color-primary);
+  color: white;
+  margin: -1.5rem;
+  margin-bottom: var(--space-4);
+  padding: var(--space-3);
+  border-radius: 0;
+}
+
+.place-info {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.place-name-container {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.place-name {
+  margin-bottom: 0.25rem;
+}
+
+.edit-place-name-form {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-bottom: var(--space-1);
+}
+
+.edit-place-name-form input {
+  flex: 1;
+  max-width: 300px;
+}
+
+.place-phone {
+  font-size: var(--font-size-md);
+  opacity: 0.8;
+}
+
+/* Fields Section */
+.fields-section {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.fields-actions {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.fields-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-3);
+}
+
+.field-item {
+  background-color: var(--color-background);
+  border-radius: var(--border-radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+
+.field-item:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.field-item.selected {
+  border-color: var(--color-primary);
+}
+
+.field-item-image {
+  height: 180px;
+  background-size: cover;
+  background-position: center;
+  background-color: var(--color-background-dark);
+  position: relative;
+}
+
+.field-item-sport {
+  position: absolute;
+  bottom: var(--space-1);
+  right: var(--space-1);
+  padding: 0.25rem 0.5rem;
+  background-color: var(--color-primary);
+  color: white;
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
+}
+
+.field-item-content {
+  padding: var(--space-2);
+}
+
+.field-item-title {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.field-item-id {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-tertiary);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .place-header {
+    padding: var(--space-2);
+  }
+  
+  .fields-list {
+    grid-template-columns: 1fr;
+  }
+}
