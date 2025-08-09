@@ -1,7 +1,7 @@
 import '../css/style.css';
 import i18next from './translations.js';
 import { getDistrictsForCity, getLocalizedDistrict } from './districts.js';
-import { createClient } from 'npm:@supabase/supabase-js';
+import { createClient } from '../node_modules/@supabase/supabase-js';
 
 // Create supabase client
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://your-project-url.supabase.co';
