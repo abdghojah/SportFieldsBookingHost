@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title data-i18n="reservation.manageTitle">Manage Reservations - SportSpot</title>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        document.body.removeAttribute("hidden");
+      });
+    </script>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/cancel-reservation.css" />
+  </head>
+  <body hidden>
+    <div class="app-container">
+      <header class="main-header">
+        <div class="logo">
+          <a href="/"><h1>SportSpot</h1></a>
+        </div>
+        <nav class="main-nav">
+          <ul>
+            <li><a href="/" data-i18n="nav.home">Home</a></li>
+            <li><a href="#" id="logout-btn" data-i18n="nav.logout">Logout</a></li>
+            <li>
+              <select id="language-select">
+                <option value="en">English</option>
+                <option value="ar">العربية</option>
+              </select>
+            </li>
+          </ul>
+        </nav>
+        <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle mobile menu">
+          <div class="hamburger-icon">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </button>
+      </header>
+
+      <main>
+        <section class="cancel-section">
+          <div class="cancel-card">
+            <h2 data-i18n="reservation.manageTitle">Manage Reservations</h2>
+            <p class="helper-text important" data-i18n="reservation.cancelNotice">Important: Reservations must be cancelled at least 12 hours before the start time.</p>
+            <div id="cancel-error" class="error-message hidden"></div>
+            
+            <!-- Date Filter Section -->
+            <div class="filter-options">
+              <div class="form-group">
+                <label for="from-date" data-i18n="reservation.fromDate">From Date</label>
+                <input type="date" id="from-date" name="fromDate">
+              </div>
+              <div class="form-group">
+                <label for="to-date" data-i18n="reservation.toDate">To Date</label>
+                <input type="date" id="to-date" name="toDate">
+              </div>
+              <div class="form-group">
+                <label for="status-filter" data-i18n="reservation.status">Status</label>
+                <select id="status-filter" name="statusFilter">
+                  <option value="">All Statuses</option>
+                  <option value="Paid">Paid</option>
+                  <option value="Waiting_Payment">Waiting Payment</option>
+                  <option value="Waiting_Refund">Waiting Refund</option>
+                  <option value="Refunded">Refunded</option>
+                  <option value="No_Payment">No Payment</option>
+                </select>
+              </div>
+              <button id="filter-reservations-btn" class="btn btn-primary" data-i18n="common.search">Search</button>
+              <button id="clear-filter-btn" class="btn btn-secondary" data-i18n="common.clear">Clear</button>
+            </div>
+            
+            <!-- Step 1: Enter phone number to request OTP (hidden for authenticated players) -->
+            <form id="request-otp-form" class="hidden">
+              <div class="form-group">
+                <label for="identifier" data-i18n="auth.phone">Phone Number</label>
+                <input 
+                  type="tel" 
+                  id="identifier" 
+                  name="identifier" 
+                  placeholder="07xxxxxxxx" 
+                  required
+                  pattern="07[0-9]{8}"
+                >
+                <p class="helper-text" data-i18n="reservation.phoneHelp">Enter the phone number used for your reservation</p>
+              </div>
+              <button type="submit" class="btn btn-primary btn-full" data-i18n="auth.requestCode">Request Verification Code</button>
+            </form>
+            
+            <!-- Step 2: Enter OTP (hidden for authenticated players) -->
+            <form id="verify-otp-form" class="hidden">
+              <div class="form-group">
+                <label for="otp" data-i18n="auth.verificationCode">Verification Code</label>
+                <input 
+                  type="text" 
+                  id="otp" 
+                  name="otp" 
+                  placeholder="Enter the code sent to you" 
+                  required
+                >
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary" data-i18n="auth.verify">Verify</button>
+                <button type="button" id="resend-otp-btn" class="btn btn-secondary" data-i18n="auth.resendCode">Resend Code</button>
+              </div>
+            </form>
+            
+            <!-- Step 3: Reservations List -->
+            <div id="reservations-container" class="reservations-container hidden">
+              <h3 data-i18n="reservation.yourReservations">Your Reservations</h3>
+              <div id="reservations-list" class="reservations-list">
+                <!-- Reservations will be populated from JS -->
+                <p id="no-reservations-message" class="no-results hidden" data-i18n="reservation.noReservations">You don't have any reservations for the selected criteria.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+      
+      <div id="cancel-confirmation" class="modal hidden">
+        <div class="modal-content">
+          <h3 data-i18n="reservation.confirmCancel">Confirm Cancellation</h3>
+          <p data-i18n="reservation.cancelWarning">Are you sure you want to cancel this reservation? This action cannot be undone.</p>
+          <div class="modal-actions">
+            <button id="confirm-cancel-btn" class="btn btn-danger" data-i18n="reservation.cancelReservation">Cancel Reservation</button>
+            <button id="cancel-cancel-btn" class="btn btn-secondary" data-i18n="reservation.keepReservation">Keep Reservation</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="logout-confirmation" class="modal hidden">
+        <div class="modal-content">
+          <h3 data-i18n="auth.confirmLogout">Confirm Logout</h3>
+          <p data-i18n="auth.logoutWarning">Are you sure you want to logout?</p>
+          <div class="modal-actions">
+            <button id="confirm-logout-btn" class="btn btn-primary" data-i18n="nav.logout">Logout</button>
+            <button id="cancel-logout-btn" class="btn btn-secondary" data-i18n="common.cancel">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="footer-content">
+          <p data-i18n="footer.copyright" data-i18n-options='{"year": "2025"}'>© 2025 SportSpot. All rights reserved.</p>
+        </div>
+      </footer>
+    </div>
+
+    <script type="module" src="/js/main.js"></script>
+    <script type="module" src="/js/cancel-reservation.js"></script>
+  </body>
+</html>

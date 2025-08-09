@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title data-i18n="auth.signupTitle">Signup - SportSpot</title>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        document.body.removeAttribute("hidden");
+      });
+    </script>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/auth.css" />
+    <link rel="stylesheet" href="/css/owner-signup.css" />
+  </head>
+  <body hidden>
+    <div class="app-container">
+      <header class="main-header">
+        <div class="logo">
+          <a href="/"><h1>SportSpot</h1></a>
+        </div>
+        <nav class="main-nav">
+          <ul>
+            <li><a href="/" data-i18n="nav.home">Home</a></li>
+            <li><a href="/login.html" data-i18n="nav.login">Login</a></li>
+            <li>
+              <select id="language-select">
+                <option value="en">English</option>
+                <option value="ar">العربية</option>
+              </select>
+            </li>
+          </ul>
+        </nav>
+        <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle mobile menu">
+          <div class="hamburger-icon">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </button>
+      </header>
+
+      <main>
+        <section class="auth-section">
+          <div class="auth-card">
+            <h2 data-i18n="auth.createAccount">Create Account</h2>
+            <div id="signup-error" class="error-message hidden"></div>
+            
+            <!-- Step 1: Initial Signup Form -->
+            <form id="signup-form">
+              <div class="form-group">
+                <label for="role" data-i18n="auth.accountType">Account Type</label>
+                <select id="role" name="role" required>
+                  <option value="" data-i18n="auth.selectAccountType">Select Account Type</option>
+                  <option value="player" data-i18n="auth.player">Player</option>
+                  <option value="owner" data-i18n="auth.fieldOwner">Field Owner</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label for="identifier" data-i18n="auth.phone">Phone Number</label>
+                <input 
+                  type="tel" 
+                  id="identifier" 
+                  name="identifier"
+                  data-i18n-placeholder="auth.phoneNumberPlaceHolder"
+                  placeholder="" 
+                  pattern="07[0-9]{8}"
+                  required
+                >
+              </div>
+              
+              <div class="form-group hidden" id="name-group">
+                <label for="name" data-i18n="auth.name">Name</label>
+                <input 
+                  type="text" 
+                  id="name" 
+                  name="name" 
+                  placeholder="Enter your full name"
+                >
+                <p class="helper-text" data-i18n="auth.nameHelp">This name will be used to verify your cliq payment for reservations</p>
+              </div>
+              
+              <div class="form-group hidden" id="secondary-phone-group">
+                <label for="secondary-phone" data-i18n="auth.secondaryPhone">Secondary Phone (Optional)</label>
+                <input 
+                  type="tel" 
+                  id="secondary-phone" 
+                  name="secondaryPhone" 
+                  data-i18n-placeholder="auth.phoneNumberPlaceHolder"
+                  placeholder="" 
+                  pattern="07[0-9]{8}"
+                >
+                <p class="helper-text" data-i18n="auth.secondaryPhoneHelp">Optional secondary contact number</p>
+              </div>
+              
+              <div class="form-group">
+                <label for="password" data-i18n="auth.password">Password</label>
+                <input 
+                  type="password" 
+                  id="password" 
+                  name="password"
+                  data-i18n-placeholder="auth.passwordPlaceHolder"
+                  placeholder="" 
+                  required
+                >
+              </div>
+              <div class="form-group">
+                <label for="confirm-password" data-i18n="auth.confirmPassword">Confirm Password</label>
+                <input 
+                  type="password" 
+                  id="confirm-password" 
+                  name="confirmPassword"
+                  data-i18n-placeholder="auth.confirmPasswordPlaceHolder"
+                  placeholder=""
+                  required
+                >
+              </div>
+              <button type="submit" class="btn btn-primary btn-full" data-i18n="auth.createAccount">Create Account</button>
+            </form>
+            
+            <!-- Step 2: OTP Verification (initially hidden) -->
+            <form id="verify-otp-form" class="hidden">
+              <div class="form-group">
+                <label for="otp" data-i18n="auth.verificationCode">Verification Code</label>
+                <input 
+                  type="text" 
+                  id="otp" 
+                  name="otp" 
+                  placeholder="Enter the code sent to you" 
+                  required
+                >
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary" data-i18n="auth.verify">Verify</button>
+                <button type="button" id="resend-otp-btn" class="btn btn-secondary" data-i18n="auth.resendCode">Resend Code</button>
+              </div>
+              <div id="countdown-text" class="countdown-text hidden">
+                <span data-i18n="common.cooldown" data-i18n-options='{"seconds": "60"}'>Please wait 60 seconds before requesting another code</span>
+              </div>
+            </form>
+            
+            <div class="auth-links">
+              <a href="/login.html" data-i18n="auth.haveAccount">Already have an account? Login</a>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        <div class="footer-content">
+          <p data-i18n="footer.copyright" data-i18n-options='{"year": "2025"}'>© 2025 SportSpot. All rights reserved.</p>
+        </div>
+      </footer>
+    </div>
+
+    <script type="module" src="/js/main.js"></script>
+    <script type="module" src="/js/owner-signup.js"></script>
+  </body>
+</html>

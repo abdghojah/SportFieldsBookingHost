@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title data-i18n="nav.myFields">My Fields - SportSpot</title>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        document.body.removeAttribute("hidden");
+      });
+    </script>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/place-fields.css" />
+  </head>
+  <body hidden>
+    <div class="app-container" id="app">
+      <header class="main-header">
+        <div class="logo">
+          <a href="/"><h1>SportSpot</h1></a>
+        </div>
+        <nav class="main-nav">
+          <ul>
+            <li><a href="#" id="logout-btn" data-i18n="nav.logout">Logout</a></li>
+            <li>
+              <select id="language-select">
+                <option value="en">English</option>
+                <option value="ar">العربية</option>
+              </select>
+            </li>
+          </ul>
+        </nav>
+        <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle mobile menu">
+          <div class="hamburger-icon">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </button>
+      </header>
+
+      <main class="protected-content hidden">
+        <section class="place-header">
+          <div class="place-info">
+            <div class="place-name-container">
+              <h2 id="place-name" class="place-name"></h2>
+              <button id="edit-place-name-btn" class="btn btn-icon">
+                <i class="icon-edit"></i>
+              </button>
+            </div>
+            <div id="edit-place-name-form" class="edit-place-name-form hidden">
+              <input type="text" id="place-name-input">
+              <button id="save-place-name-btn" class="btn btn-primary" data-i18n="common.save">Save</button>
+              <button id="cancel-place-name-btn" class="btn btn-secondary" data-i18n="common.cancel">Cancel</button>
+            </div>
+            <p id="place-phone" class="place-phone"></p>
+          </div>
+        </section>
+
+        <section class="fields-section">
+          <div class="section-header">
+            <h3 data-i18n="nav.myFields">My Fields</h3>
+            <button id="add-field-btn" class="btn btn-primary" data-i18n="field.addField">Add New Field</button>
+          </div>
+          
+          <div id="fields-list" class="fields-list">
+            <p id="no-fields-message" class="no-results" data-i18n="field.noFields">You don't have any fields yet. Click "Add New Field" to create one.</p>
+          </div>
+        </section>
+      </main>
+
+      <div id="logout-confirmation" class="modal hidden">
+        <div class="modal-content">
+          <h3 data-i18n="auth.confirmLogout">Confirm Logout</h3>
+          <p data-i18n="auth.logoutWarning">Are you sure you want to logout?</p>
+          <div class="modal-actions">
+            <button id="confirm-logout-btn" class="btn btn-primary" data-i18n="nav.logout">Logout</button>
+            <button id="cancel-logout-btn" class="btn btn-secondary" data-i18n="common.cancel">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="footer-content">
+          <p data-i18n="footer.copyright" data-i18n-options='{"year": "2025"}'>© 2025 SportSpot. All rights reserved.</p>
+        </div>
+      </footer>
+    </div>
+
+    <script type="module" src="/js/main.js"></script>
+    <script type="module" src="/js/place-fields.js"></script>
+  </body>
+</html>

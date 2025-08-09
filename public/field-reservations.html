@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title data-i18n="field.reservations">Field Reservations - SportSpot</title>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        document.body.removeAttribute("hidden");
+      });
+    </script>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/field-reservations.css" />
+  </head>
+  <body hidden>
+    <div class="app-container">
+      <header class="main-header">
+        <div class="logo">
+          <a href="/"><h1>SportSpot</h1></a>
+        </div>
+        <nav class="main-nav">
+          <ul>
+            <li><a href="/place-fields.html" data-i18n="nav.myFields">My Fields</a></li>
+            <li><a id="field-page-link" href="#" data-i18n="field.editField">Field Page</a></li>
+            <li><a href="#" id="logout-btn" data-i18n="nav.logout">Logout</a></li>
+            <li>
+              <select id="language-select">
+                <option value="en">English</option>
+                <option value="ar">العربية</option>
+              </select>
+            </li>
+          </ul>
+        </nav>
+        <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle mobile menu">
+          <div class="hamburger-icon">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </button>
+      </header>
+
+      <main class="protected-content hidden">
+        <section class="reservations-section">
+          <div class="section-header">
+            <h2 id="field-name" data-i18n="field.reservations">Field Reservations</h2>
+          </div>
+          
+          <div class="filter-options">
+            <div class="form-group">
+              <label for="from-date" data-i18n="reservation.fromDate">From Date</label>
+              <input type="date" id="from-date" name="fromDate" required>
+            </div>
+            <div class="form-group">
+              <label for="to-date" data-i18n="reservation.toDate">To Date</label>
+              <input type="date" id="to-date" name="toDate" required>
+            </div>
+            <button id="filter-reservations-btn" class="btn btn-primary" data-i18n="common.search">Filter</button>
+            <button id="clear-filter-btn" class="btn btn-secondary" data-i18n="common.clear">Clear</button>
+          </div>
+          
+          <div id="reservations-list" class="reservations-list">
+            <p class="no-results" data-i18n="reservation.selectDateRange">Select a date range to view reservations</p>
+          </div>
+        </section>
+      </main>
+
+      <div id="logout-confirmation" class="modal hidden">
+        <div class="modal-content">
+          <h3 data-i18n="auth.confirmLogout">Confirm Logout</h3>
+          <p data-i18n="auth.logoutWarning">Are you sure you want to logout?</p>
+          <div class="modal-actions">
+            <button id="confirm-logout-btn" class="btn btn-primary" data-i18n="nav.logout">Logout</button>
+            <button id="cancel-logout-btn" class="btn btn-secondary" data-i18n="common.cancel">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="footer-content">
+          <p data-i18n="footer.copyright" data-i18n-options='{"year": "2025"}'>© 2025 SportSpot. All rights reserved.</p>
+        </div>
+      </footer>
+    </div>
+
+    <script type="module" src="/js/main.js"></script>
+    <script type="module" src="/js/field-reservations.js"></script>
+  </body>
+</html>
