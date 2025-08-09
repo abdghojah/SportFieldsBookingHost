@@ -1,5 +1,5 @@
-import { supabase, SPORTS, formatPrice, formatTimeRange } from './main.js';
-import { getDistrictsForCity, getLocalizedDistrict } from './districts.js';
+import { supabase, SPORTS, formatPrice, formatTimeRange, showMessageBox, populateDistricts } from './main.js';
+import { getLocalizedDistrict } from './districts.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
   const searchForm = document.getElementById('search-form');
@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const sportTypeSelect = document.getElementById('sport-type');
   const citySelect = document.getElementById('city');
   const districtSelect = document.getElementById('district');
+  const fieldTypeSelect = document.getElementById('field-type');
   
   // Populate sport types
   Object.entries(SPORTS).forEach(([value, label]) => {
@@ -28,7 +29,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // City change handler for districts
   citySelect.addEventListener('change', (e) => {
     const selectedCity = e.target.value;
-    populateDistricts(selectedCity);
+    populateDistricts(selectedCity, districtSelect);
   });
   
   // Set minimum time if date is today
@@ -51,53 +52,19 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Initial min time setup
   updateMinTime();
   
-  function populateDistricts(city) {
-    // Clear existing districts
-    districtSelect.innerHTML = '<option value="" data-i18n="search.districtPlaceholder">Select District</option>';
-    
-    if (!city) {
-      districtSelect.disabled = true;
-      return;
-    }
-    
-    // Get current language
-    const currentLanguage = localStorage.getItem('selectedLanguage') || 'en';
-    
-    // Add "All Districts" option
-    const allOption = document.createElement('option');
-    allOption.value = 'all';
-    allOption.textContent = currentLanguage === 'ar' ? 'جميع المناطق' : 'All Districts';
-    districtSelect.appendChild(allOption);
-    
-    // Get English districts for the values, but display localized names
-    const englishDistricts = getDistrictsForCity(city, 'en');
-    
-    if (englishDistricts.length > 0) {
-      districtSelect.disabled = false;
-      
-      englishDistricts.forEach(englishDistrict => {
-        const option = document.createElement('option');
-        option.value = englishDistrict; // Always store English value
-        option.textContent = getLocalizedDistrict(city, englishDistrict, currentLanguage); // Display localized name
-        districtSelect.appendChild(option);
-      });
-    } else {
-      districtSelect.disabled = true;
-    }
-  }
-  
   searchForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     
     const city = citySelect.value;
     const district = districtSelect.value;
     const sportType = sportTypeSelect.value;
+    const fieldType = fieldTypeSelect.value;
     const date = dateInput.value;
     const timeFrom = timeFromInput.value;
     const timeTo = timeToInput.value;
     
     if (!city || !sportType || !date || !timeFrom || !timeTo) {
-      alert('Please fill in all required search fields');
+      showMessageBox('Validation Error', 'Please fill in all required search fields', 'error');
       return;
     }
     
@@ -106,7 +73,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const now = new Date();
     
     if (selectedDateTime < now) {
-      alert('Cannot search for past dates and times');
+      showMessageBox('Validation Error', 'Cannot search for past dates and times', 'error');
       return;
     }
     
@@ -118,6 +85,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const searchParams = {
         city,
         sportType,
+        fieldType,
         date,
         timeFrom,
         timeTo
@@ -156,6 +124,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     } catch (error) {
       console.error('Search error:', error);
       searchResults.innerHTML = '<p class="error-message">Error searching for fields. Please try again.</p>';
+      
+      // Scroll to results section even when there's an error
+      const resultsSection = document.querySelector('.results-section');
+      if (resultsSection) {
+        resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     }
   });
   
@@ -163,6 +137,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   function renderSearchResults(fields, date, timeFrom, timeTo) {
     if (!fields || fields.length === 0) {
       searchResults.innerHTML = '<p class="no-results">No available fields found. Try different search criteria.</p>';
+      
+      // Scroll to results section even when no results found
+      const resultsSection = document.querySelector('.results-section');
+      if (resultsSection) {
+        resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
       return;
     }
     
@@ -191,7 +171,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             <div class="field-card-detail">
               <span class="field-card-sport">${SPORTS[field.sport_type]}</span>
               <div class="field-card-prices">
-                <span class="field-card-price-hour">${formatPrice(field.price_per_hour)}/hour</span>
                 <span class="field-card-price-total">Total: ${formatPrice(field.totalPrice)}</span>
               </div>
             </div>

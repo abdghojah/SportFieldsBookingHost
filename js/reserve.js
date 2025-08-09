@@ -1,7 +1,12 @@
-import { supabase, SPORTS, formatPrice, formatTime, isValidJordanianPhone, showElement, hideElement, showError, formatJordanianPhone } from './main.js';
+import { supabase, SPORTS, formatPrice, formatTime, isValidJordanianPhone, showElement, hideElement, showError, formatJordanianPhone, showMessageBox } from './main.js';
 import { getLocalizedDistrict } from './districts.js';
+import i18next from './translations.js';
+import { updateNavigationVisibility } from './main.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
+  // Initialize navigation visibility
+  await updateNavigationVisibility();
+  
   // Get URL parameters
   const params = new URLSearchParams(window.location.search);
   const fieldId = params.get('id');
@@ -40,6 +45,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const selectedSlotText = document.getElementById('selected-slot-text');
   const selectedSlotPrice = document.getElementById('selected-slot-price');
   const reservationFormContainer = document.getElementById('reservation-form-container');
+  const reservationError = document.getElementById('reservation-error');
   const loginForm = document.getElementById('login-form');
   const reservationSuccess = document.getElementById('reservation-success');
   const reservationId = document.getElementById('reservation-id');
@@ -96,13 +102,20 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (error) throw error;
 
       // Verify user is a player
-      const { data: userData, error: userError } = await supabase
-        .from('users')
-        .select('role, name')
-        .eq('id', data.user.id)
-        .single();
+      const userResponse = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/get-user-role`, {
+        headers: {
+          'Authorization': `Bearer ${data.session.access_token}`,
+        },
+      });
 
-      if (userError || userData.role !== 'player') {
+      if (!userResponse.ok) {
+        await supabase.auth.signOut();
+        throw new Error('Failed to verify user role');
+      }
+
+      const userData = await userResponse.json();
+
+      if (userData.role !== 'player') {
         await supabase.auth.signOut();
         throw new Error('Only players can make reservations');
       }
@@ -163,7 +176,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
     } catch (error) {
       console.error('Error loading field data:', error);
-      alert('Failed to load field data. Please try again.');
+      showMessageBox('Error', 'Failed to load field data. Please try again.', 'error');
     }
   }
   
@@ -174,15 +187,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Set basic field info
     fieldNameElement.textContent = field.name;
     placeNameElement.textContent = field.places.name;
-    sportTypeElement.textContent = SPORTS[field.sport_type];
+    sportTypeElement.textContent = i18next.t(`sports.${field.sport_type}`);
     
     // Display localized district name
     const localizedDistrict = getLocalizedDistrict(field.city, field.district, currentLanguage);
-    cityElement.textContent = `${field.city} - ${localizedDistrict}`;
+    cityElement.textContent = i18next.t(`cities.${field.city.toLowerCase()}`) + ` - ${localizedDistrict}`;
     
-    priceElement.textContent = `${formatPrice(field.price_per_hour)} per hour`;
-    minTimeElement.textContent = `${field.min_booking_time} hour${field.min_booking_time > 1 ? 's' : ''}`;
-    minBookingTimeElement.textContent = `${field.min_booking_time} hour${field.min_booking_time > 1 ? 's' : ''}`;
+    priceElement.textContent = `${formatPrice(field.price_per_hour)}${i18next.t('field.pricePerHour')}`;
+    minTimeElement.textContent = `${field.min_booking_time} ${i18next.t('views.hour')}`;
+    minBookingTimeElement.textContent = `${field.min_booking_time} ${i18next.t('views.hour')}`;
     includedServicesElement.textContent = field.included_services || 'None';
     
     // Set field images
@@ -274,7 +287,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       // Display time pattern info only if it exists
       if (fieldData.time_pattern) {
         const { hours, start_time } = fieldData.time_pattern;
-        timePatternInfo.textContent = `Every ${hours} hour${hours > 1 ? 's' : ''} starting from ${formatTime(start_time)}`;
+        timePatternInfo.textContent = `${i18next.t('field.searchPatternEvery')} ${hours} ${i18next.t('field.searchPatterenHour')} ${i18next.t('field.startingFrom')} ${formatTime(start_time)}`;
         showElement(timePatternInfoItem);
       } else {
         hideElement(timePatternInfoItem);
@@ -292,11 +305,14 @@ document.addEventListener('DOMContentLoaded', async () => {
       } else {
         hideElement(blockedTimesInfoItem);
       }
+
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token || import.meta.env.VITE_SUPABASE_ANON_KEY;
       
       // Get and display existing reservations
       const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/reservations?field_id=${fieldId}&from_date=${dateString}&to_date=${dateString}`, {
         headers: {
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+          'Authorization': `Bearer ${token}`,
         },
       });
 
@@ -312,7 +328,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           `<div class="time-block">${formatTime(reservation.time_from)} - ${formatTime(reservation.time_to)}</div>`
         ).join('');
       } else {
-        reservationsInfo.textContent = 'No reservations for this day';
+        reservationsInfo.textContent = i18next.t('reservation.noReservationsForDay');
       }
       
       // Reset time inputs
@@ -337,7 +353,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       
     } catch (error) {
       console.error('Error showing time info:', error);
-      alert('Failed to load time information. Please try again.');
+      showMessageBox('Error', 'Failed to load time information. Please try again.', 'error');
     }
   }
 
@@ -347,6 +363,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     const timeFrom = timeFromInput.value;
     const timeTo = timeToInput.value;
     
+    // Clear any previous error messages and reservation form
+    console.log('Starting validation for:', timeFrom, 'to', timeTo);
+    if (reservationError) {
+      reservationError.textContent = '';
+      hideElement(reservationError);
+      console.log('Cleared previous error');
+    }
+    hideElement(reservationFormContainer);
+    
     try {
       // Validate date and time are not in the past
       const fromDate = new Date(`${currentDate}T${timeFrom}`);
@@ -354,7 +379,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       const now = new Date();
       
       if (fromDate < now) {
-        showError('reservation-error', 'Cannot book time slots in the past');
+        reservationError.textContent = i18next.t('common.error.pastTime');
+        showElement(reservationError);
         return;
       }
       
@@ -371,7 +397,20 @@ document.addEventListener('DOMContentLoaded', async () => {
       
       // Check minimum booking time
       if (durationHours < fieldData.min_booking_time) {
-        showError('reservation-error', `Minimum booking time is ${fieldData.min_booking_time} hour${fieldData.min_booking_time > 1 ? 's' : ''}`);
+        const plural = fieldData.min_booking_time > 1 ? 's' : '';
+        const errorMsg = i18next.t('common.error.tooShort', { 
+          hours: fieldData.min_booking_time,
+          plural: plural
+        });
+        console.log('Showing error:', errorMsg);
+        if (reservationError) {
+          reservationError.textContent = errorMsg;
+          reservationError.style.display = 'block';
+          showElement(reservationError);
+          console.log('Error element updated');
+        } else {
+          console.error('reservationError element not found!');
+        }
         return;
       }
       
@@ -384,14 +423,35 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Check if start time matches pattern
         const minutesSinceStart = (fromMinutes - startTimeMinutes) % patternMinutes;
         if (minutesSinceStart !== 0) {
-          showError('reservation-error', `Start time must match the pattern: every ${hours} hour${hours > 1 ? 's' : ''} from ${formatTime(start_time)}`);
+          const plural = hours > 1 ? 's' : '';
+          const errorMsg = i18next.t('common.error.patternMismatch', {
+            hours: hours,
+            plural: plural,
+            startTime: formatTime(start_time)
+          });
+          console.log('Showing pattern error:', errorMsg);
+          if (reservationError) {
+            reservationError.textContent = errorMsg;
+            reservationError.style.display = 'block';
+            showElement(reservationError);
+          }
           return;
         }
         
         // Check if duration matches pattern
         const durationMinutes = toMinutes - fromMinutes;
         if (durationMinutes % patternMinutes !== 0) {
-          showError('reservation-error', `Duration must be a multiple of ${hours} hour${hours > 1 ? 's' : ''}`);
+          const plural = hours > 1 ? 's' : '';
+          const errorMsg = i18next.t('common.error.durationPattern', {
+            hours: hours,
+            plural: plural
+          });
+          console.log('Showing duration error:', errorMsg);
+          if (reservationError) {
+            reservationError.textContent = errorMsg;
+            reservationError.style.display = 'block';
+            showElement(reservationError);
+          }
           return;
         }
       }
@@ -402,15 +462,27 @@ document.addEventListener('DOMContentLoaded', async () => {
       
       for (const block of blockedForDay) {
         if (hasTimeConflict(timeFrom, timeTo, block.from, block.to)) {
-          showError('reservation-error', `Selected time conflicts with blocked time: ${formatTime(block.from)} - ${formatTime(block.to)}`);
+          const errorMsg = i18next.t('common.error.blockedTime', {
+            from: formatTime(block.from),
+            to: formatTime(block.to)
+          });
+          console.log('Showing blocked time error:', errorMsg);
+          if (reservationError) {
+            reservationError.textContent = errorMsg;
+            reservationError.style.display = 'block';
+            showElement(reservationError);
+          }
           return;
         }
       }
+
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token || import.meta.env.VITE_SUPABASE_ANON_KEY;
       
       // Check existing reservations
       const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/reservations?field_id=${fieldId}&from_date=${currentDate}&to_date=${currentDate}`, {
         headers: {
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+          'Authorization': `Bearer ${token}`,
         },
       });
 
@@ -424,7 +496,16 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (reservations) {
         for (const reservation of reservations) {
           if (hasTimeConflict(timeFrom, timeTo, reservation.time_from, reservation.time_to)) {
-            showError('reservation-error', `Selected time conflicts with existing reservation: ${formatTime(reservation.time_from)} - ${formatTime(reservation.time_to)}`);
+            const errorMsg = i18next.t('common.error.alreadyBooked', {
+              from: formatTime(reservation.time_from),
+              to: formatTime(reservation.time_to)
+            });
+            console.log('Showing conflict error:', errorMsg);
+            if (reservationError) {
+              reservationError.textContent = errorMsg;
+              reservationError.style.display = 'block';
+              showElement(reservationError);
+            }
             return;
           }
         }
@@ -434,17 +515,23 @@ document.addEventListener('DOMContentLoaded', async () => {
       selectedTimeSlot = { from: timeFrom, to: timeTo };
       
       // Calculate total price with adjusted duration
-      const totalPrice = fieldData.price_per_hour * durationHours;
+      let totalPrice = calculateTotalPrice(fieldData.price_per_hour, timeFrom, timeTo, currentDate, fieldData.discount_times);
       
       // Update selected slot info
       selectedSlotText.textContent = `${formatTime(timeFrom)} - ${formatTime(timeTo)}`;
-      selectedSlotPrice.textContent = `Total: ${formatPrice(totalPrice)}`;
+      selectedSlotPrice.innerHTML = `<span data-i18n="reservation.totalLabel">${i18next.t('reservation.totalLabel')}</span> : ${formatPrice(totalPrice)}`;
       
       showElement(reservationFormContainer);
       
     } catch (error) {
       console.error('Error validating time range:', error);
-      showError('reservation-error', 'Failed to validate time range. Please try again.');
+      const errorMsg = i18next.t('common.error.checkAvailability');
+      console.log('Showing general error:', errorMsg);
+      if (reservationError) {
+        reservationError.textContent = errorMsg;
+        reservationError.style.display = 'block';
+        showElement(reservationError);
+      }
     }
   }
   
@@ -474,12 +561,62 @@ document.addEventListener('DOMContentLoaded', async () => {
       // Show success message
       hideElement(loginForm);
       reservationId.textContent = data.id;
+      
+      // Update success message with fee information
+      const successMessageElement = document.querySelector('#reservation-success p');
+      if (successMessageElement && data.fee) {
+        const feeAmount = parseFloat(data.fee).toFixed(3);
+        successMessageElement.textContent = i18next.t('reservation.successMessageWithFee', { fee: feeAmount, currency: i18next.t('common.currency') });
+      }
+      
       showElement(reservationSuccess);
     } catch (error) {
       console.error('Error creating reservation:', error);
       showError('reservation-error', error.message || 'Failed to create reservation. Please try again.');
     }
   }
+
+  function calculateTotalPrice(price_per_hour, time_from, time_to, date, discount_times) {
+  const fromMinutes = timeToMinutes(time_from);
+  let toMinutes = timeToMinutes(time_to);
+  
+  // Adjust for midnight spanning
+  if (toMinutes <= fromMinutes) {
+    toMinutes += 24 * 60;
+  }
+  
+  const durationHours = (toMinutes - fromMinutes) / 60;
+  let totalPrice = price_per_hour * durationHours;
+
+  // Apply discount if applicable
+  if (discount_times) {
+    console.log("we have discount times !");
+    const searchDate = new Date(date);
+    const dayOfWeek = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][searchDate.getDay()];
+    
+    // Check if the entire reservation time falls within any discount period
+    for (const discount of discount_times) {
+      if (discount.day === dayOfWeek) {
+        console.log("we have day match !");
+        const discountFromMinutes = timeToMinutes(discount.from);
+        const discountToMinutes = timeToMinutes(discount.to);
+
+        console.log("check discount match : reqFrom: " + time_from + " reqTo: " + time_to + " disFrom: " + discount.from + " disTo: " + discount.to);
+        // Check if entire reservation is within discount period
+        if (fromMinutes >= discountFromMinutes && toMinutes <= discountToMinutes) {
+          console.log("discount calculated !");
+          const discountAmount = totalPrice * (discount.percentage / 100);
+          totalPrice = totalPrice - discountAmount;
+
+          console.log("total after discount = " + totalPrice + " Discount value = " + discountAmount + "discount precentage = " + (discount.percentage / 100));
+          break; // Apply only the first matching discount
+        }
+      }
+    }
+  }
+
+  return totalPrice;
+}
   
   function timeToMinutes(timeString) {
     const [hours, minutes] = timeString.split(':').map(Number);

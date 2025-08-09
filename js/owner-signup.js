@@ -1,4 +1,4 @@
-import { supabase, isValidJordanianPhone, showElement, hideElement, showError, formatJordanianPhone, updateNavigationVisibility } from './main.js';
+import { supabase, isValidJordanianPhone, showElement, hideElement, showError, formatJordanianPhone, updateNavigationVisibility, showMessageBox } from './main.js';
 import i18next from './translations.js';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -136,8 +136,9 @@ document.addEventListener('DOMContentLoaded', () => {
       await updateNavigationVisibility();
       
       // Redirect based on role
-      alert('Account created successfully! You can now login.');
-      window.location.href = '/login.html';
+      showMessageBox('Success', 'Account created successfully! You can now login.', 'success', () => {
+        window.location.href = '/login.html';
+      });
     } catch (error) {
       showError('signup-error', error.message || 'Failed to verify code');
       console.error('OTP verification error:', error);
@@ -153,7 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       await requestOTP(identifier);
       startCooldown();
-      alert('A new verification code has been sent!');
+      showMessageBox('Info', 'A new verification code has been sent!', 'info');
     } catch (error) {
       showError('signup-error', error.message || 'Failed to resend verification code');
       console.error('Resend OTP error:', error);

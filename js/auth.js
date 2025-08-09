@@ -1,4 +1,4 @@
-import { supabase, showError, formatJordanianPhone, isValidJordanianPhone, updateNavigationVisibility } from './main.js';
+import { supabase, showError, formatJordanianPhone, isValidJordanianPhone, updateNavigationVisibility, showMessageBox } from './main.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const loginForm = document.getElementById('login-form');

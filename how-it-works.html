@@ -4,26 +4,26 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>How it Works - SportSpot</title>
+    <title data-i18n="nav.howItWorks">How it Works - SportSpot</title>
     <script>
       document.addEventListener("DOMContentLoaded", function() {
         document.body.removeAttribute("hidden");
       });
     </script>
-    <link rel="stylesheet" href="/SportFieldsBookingHost/css/style.css" />
-    <link rel="stylesheet" href="/SportFieldsBookingHost/css/how-it-works.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/how-it-works.css" />
   </head>
   <body hidden>
     <div class="app-container">
       <header class="main-header">
         <div class="logo">
-          <a href="/SportFieldsBookingHost/"><h1>SportSpot</h1></a>
+          <a href="/"><h1>SportSpot</h1></a>
         </div>
         <nav class="main-nav">
           <ul>
-            <li><a href="/SportFieldsBookingHost/" data-i18n="nav.home">Home</a></li>
-            <li><a href="/SportFieldsBookingHost/how-it-works.html" data-i18n="nav.howItWorks">How it Works</a></li>
-            <li><a href="/SportFieldsBookingHost/contact.html" data-i18n="nav.contact">Contact Us</a></li>
+            <li><a href="/" data-i18n="nav.home">Home</a></li>
+            <li><a href="/how-it-works.html" data-i18n="nav.howItWorks">How it Works</a></li>
+            <li><a href="/contact.html" data-i18n="nav.contact">Contact Us</a></li>
             <li>
               <select id="language-select">
                 <option value="en">English</option>
@@ -32,57 +32,64 @@
             </li>
           </ul>
         </nav>
+        <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle mobile menu">
+          <div class="hamburger-icon">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </button>
       </header>
 
       <main>
         <section class="how-it-works-section">
-          <h2>How SportSpot Works</h2>
+          <h2 data-i18n="howItWorks.title">How SportSpot Works</h2>
           
           <div class="steps-container">
             <div class="step">
-              <h3>1. Find Your Perfect Field</h3>
-              <p>Search for a field using location and time, or search for a specific place by name and select a field from that location.</p>
+              <h3 data-i18n="howItWorks.step1.title">1. Find Your Perfect Field</h3>
+              <p data-i18n="howItWorks.step1.description">Search for a field using location and time, or search for a specific place by name and select a field from that location.</p>
             </div>
 
             <div class="step">
-              <h3>2. Choose Your Time</h3>
-              <p>In the field page, you can update the date and time as needed. The page provides helpful reservation information including:</p>
+              <h3 data-i18n="howItWorks.step2.title">2. Choose Your Time</h3>
+              <p data-i18n="howItWorks.step2.description">In the field page, you can update the date and time as needed. The page provides helpful reservation information including:</p>
               <ul>
-                <li>Minimum booking time</li>
-                <li>Blocked times</li>
-                <li>Allowed time patterns</li>
-                <li>Already reserved times</li>
+                <li data-i18n="howItWorks.step2.items.0">Minimum booking time</li>
+                <li data-i18n="howItWorks.step2.items.1">Blocked times</li>
+                <li data-i18n="howItWorks.step2.items.2">Allowed time patterns</li>
+                <li data-i18n="howItWorks.step2.items.3">Already reserved times</li>
               </ul>
             </div>
 
             <div class="step">
-              <h3>3. Make Your Reservation</h3>
-              <p>Once you select a date and time, you'll need to:</p>
+              <h3 data-i18n="howItWorks.step3.title">3. Make Your Reservation</h3>
+              <p data-i18n="howItWorks.step3.description">Once you select a date and time, you'll need to:</p>
               <ul>
-                <li>Enter your name (must match the name used for payment)</li>
-                <li>Provide your phone number</li>
-                <li>Verify your phone number using an OTP code</li>
+                <li data-i18n="howItWorks.step3.items.0">Enter your name (must match the name used for payment)</li>
+                <li data-i18n="howItWorks.step3.items.1">Provide your phone number</li>
+                <li data-i18n="howItWorks.step3.items.2">Verify your phone number using an OTP code</li>
               </ul>
             </div>
 
             <div class="step">
-              <h3>4. Confirm Your Booking</h3>
-              <p>After the initial reservation:</p>
+              <h3 data-i18n="howItWorks.step4.title">4. Confirm Your Booking</h3>
+              <p data-i18n="howItWorks.step4.description">After the initial reservation:</p>
               <ul>
-                <li>Your spot is temporarily reserved but not confirmed</li>
-                <li>Pay a 1 JOD reservation fee using Cliq (separate from field fees)</li>
-                <li>Complete payment within one hour to avoid automatic cancellation</li>
-                <li>Receive WhatsApp updates about your reservation status</li>
+                <li data-i18n="howItWorks.step4.items.0">Your spot is temporarily reserved but not confirmed</li>
+                <li data-i18n="howItWorks.step4.items.1">Pay around 1 {{currency}} reservation fee (exact value will be available once field reserved, needs to pay exact fee value to confirm reservation) using Cliq, separate from field fees.</li>
+                <li data-i18n="howItWorks.step4.items.2">Complete payment within one hour to avoid automatic cancellation</li>
+                <li data-i18n="howItWorks.step4.items.3">Receive WhatsApp confrimation once payment verified.</li>
               </ul>
             </div>
 
             <div class="step">
-              <h3>5. Manage Your Reservations</h3>
-              <p>Use the "Manage Reservation" link on the main page to:</p>
+              <h3 data-i18n="howItWorks.step5.title">5. Manage Your Reservations</h3>
+              <p data-i18n="howItWorks.step5.description">Use the "Manage Reservation" link on the main page to:</p>
               <ul>
-                <li>View your active reservations</li>
-                <li>Check reservation status</li>
-                <li>Cancel reservations if needed</li>
+                <li data-i18n="howItWorks.step5.items.0">View your active reservations</li>
+                <li data-i18n="howItWorks.step5.items.1">Check reservation status</li>
+                <li data-i18n="howItWorks.step5.items.2">Cancel reservations if needed</li>
               </ul>
             </div>
           </div>
@@ -96,6 +103,6 @@
       </footer>
     </div>
 
-    <script type="module" src="/SportFieldsBookingHost/js/main.js"></script>
+    <script type="module" src="/js/main.js"></script>
   </body>
 </html>

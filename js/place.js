@@ -1,4 +1,5 @@
 import { SPORTS, formatPrice } from './main.js';
+import i18next from './translations.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
   // Get place ID from URL
@@ -58,10 +59,10 @@ document.addEventListener('DOMContentLoaded', async () => {
               <p class="field-card-place">${field.city}</p>
             </div>
             <div class="field-card-detail">
-              <span class="field-card-sport">${SPORTS[field.sport_type]}</span>
+              <span class="field-card-sport" data-i18n="sports.${field.sport_type}">${field.sport_type}</span>
               <div class="field-card-prices">
-                <span class="field-card-price-hour">${formatPrice(field.price_per_hour)}/hour</span>
-                <span class="field-card-price-total">Min booking: ${field.min_booking_time}h</span>
+                <span class="field-card-price-hour">${formatPrice(field.price_per_hour)}${i18next.t('field.pricePerHour')}</span>
+                <span class="field-card-price-total">${i18next.t('field.minBookingTime')} ${field.min_booking_time} ${i18next.t('views.hour')}</span>
               </div>
             </div>
           </div>

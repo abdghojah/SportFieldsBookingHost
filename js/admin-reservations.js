@@ -1,4 +1,4 @@
-import { supabase, checkAuth, formatDate, formatTime, showElement, hideElement } from './main.js';
+import { supabase, checkAuth, formatDate, formatTime, showElement, hideElement, showMessageBox } from './main.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
   // Check if user is authenticated and is admin
@@ -34,12 +34,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     const status = statusSelect.value;
 
     if (!fromDate || !toDate) {
-      alert('Please select both from and to dates');
+      showMessageBox('Error', 'Please select both from and to dates', 'error');
       return;
     }
 
     if (fromDate > toDate) {
-      alert('From date must be before or equal to to date');
+      showMessageBox('Error', 'From date must be before or equal to to date', 'error');
       return;
     }
 
@@ -170,10 +170,10 @@ document.addEventListener('DOMContentLoaded', async () => {
               throw new Error(error.message || 'Failed to update status');
             }
 
-            alert('Status updated successfully');
+            showMessageBox('Success', 'Status updated successfully', 'success');
           } catch (error) {
             console.error('Error updating status:', error);
-            alert(error.message || 'Failed to update status');
+            showMessageBox('Error', error.message || 'Failed to update status', 'error');
           } finally {
             button.disabled = false;
             button.textContent = 'Save Status';

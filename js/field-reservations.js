@@ -84,6 +84,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   
   async function loadReservations(fromDate, toDate) {
     try {
+      const { data: { session } } = await supabase.auth.getSession();
       // Show loading state
       reservationsList.innerHTML = `<p class="no-results">${i18next.t('common.loading')}</p>`;
       
@@ -95,7 +96,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       const response = await fetch(url, {
         headers: {
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+          'Authorization': `Bearer ${session.access_token}`,
         },
       });
 
@@ -120,6 +121,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         const statusClass = reservation.is_cancelled ? 'status-cancelled' : 'status-active';
         const statusText = reservation.is_cancelled ? i18next.t('common.status.cancelled') : i18next.t('common.status.active');
         
+        // Get user name and phone from the users relationship
+        const userName = reservation.users?.name || 'N/A';
+        const userPhone = reservation.users?.phone || 'N/A';
+        
         html += `
           <div class="reservation-card">
             <div class="reservation-header">
@@ -133,11 +138,11 @@ document.addEventListener('DOMContentLoaded', async () => {
               </div>
               <div class="reservation-detail">
                 <span class="reservation-detail-label">${i18next.t('reservation.reserverName')}</span>
-                <span>${reservation.reserver_name}</span>
+                <span>${userName}</span>
               </div>
               <div class="reservation-detail">
                 <span class="reservation-detail-label">${i18next.t('reservation.reserverPhone')}</span>
-                <span>${reservation.reserver_phone}</span>
+                <span>${userPhone}</span>
               </div>
               <div class="reservation-detail">
                 <span class="reservation-detail-label">${i18next.t('reservation.totalPrice')}</span>

@@ -1,4 +1,5 @@
-import { SPORTS, showElement, hideElement } from './main.js';
+import { SPORTS, showElement, hideElement, showMessageBox } from './main.js';
+import i18next from './translations.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const placeNameInput = document.getElementById('place-name');
@@ -13,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const placeName = placeNameInput.value.trim();
     
     if (!placeName) {
-      alert('Please enter a place name');
+      showMessageBox('Validation Error', 'Please enter a place name', 'error');
       return;
     }
     
@@ -41,6 +42,12 @@ document.addEventListener('DOMContentLoaded', () => {
       
       if (!places || places.length === 0) {
         placesList.innerHTML = '<p class="no-results">No places found matching your search.</p>';
+        
+        // Scroll to results section even when no results found
+        const resultsSection = document.querySelector('.results-section');
+        if (resultsSection) {
+          resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
         return;
       }
       
@@ -58,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const sportBadges = Object.entries(sportCounts)
           .map(([sport, count]) => `
             <span class="place-card-stat">
-              ${SPORTS[sport]}: ${count} field${count > 1 ? 's' : ''}
+              ${i18next.t(`sports.${sport}`)}: ${i18next.t(count > 1 ? 'views.fieldsCountPlural' : 'views.fieldsCount', { count })}
             </span>
           `)
           .join('');

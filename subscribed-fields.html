@@ -10,8 +10,8 @@
         document.body.removeAttribute("hidden");
       });
     </script>
-    <link rel="stylesheet" href="/SportFieldsBookingHost/css/style.css" />
-    <link rel="stylesheet" href="/SportFieldsBookingHost/css/subscribed-fields.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/subscribed-fields.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
@@ -20,15 +20,15 @@
     <div class="app-container">
       <header class="main-header">
         <div class="logo">
-          <a href="/SportFieldsBookingHost/"><h1>SportSpot</h1></a>
+          <a href="/"><h1>SportSpot</h1></a>
         </div>
         <nav class="main-nav">
           <ul>
-            <li><a href="/SportFieldsBookingHost/" data-i18n="nav.home">Home</a></li>
-            <li><a href="/SportFieldsBookingHost/subscribed-fields.html" data-i18n="nav.subscribedFields">Subscribed Fields</a></li>
-            <li><a href="/SportFieldsBookingHost/contact.html" data-i18n="nav.contact">Contact Us</a></li>
-            <li><a href="/SportFieldsBookingHost/owner-signup.html" data-i18n="nav.signup">Signup</a></li>
-            <li><a href="/SportFieldsBookingHost/login.html" data-i18n="nav.login">Login</a></li>
+            <li><a href="/" data-i18n="nav.home">Home</a></li>
+            <li><a href="/subscribed-fields.html" data-i18n="nav.subscribedFields">Subscribed Fields</a></li>
+            <li><a href="/contact.html" data-i18n="nav.contact">Contact Us</a></li>
+            <li><a href="/owner-signup.html" data-i18n="nav.signup">Signup</a></li>
+            <li><a href="/login.html" data-i18n="nav.login">Login</a></li>
             <li>
               <select id="language-select">
                 <option value="en">English</option>
@@ -37,6 +37,13 @@
             </li>
           </ul>
         </nav>
+        <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle mobile menu">
+          <div class="hamburger-icon">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </button>
       </header>
 
       <main>
@@ -47,8 +54,8 @@
           </div>
           
           <div class="view-toggle">
-            <button id="list-view-btn" class="btn btn-primary active">List View</button>
-            <button id="map-view-btn" class="btn btn-secondary">Map View</button>
+            <button id="list-view-btn" class="btn btn-primary active" data-i18n="views.listView">List View</button>
+            <button id="map-view-btn" class="btn btn-secondary" data-i18n="views.mapView">Map View</button>
           </div>
           
           <div id="list-view" class="view-container">
@@ -60,27 +67,27 @@
           <div id="map-view" class="view-container hidden">
             <div id="fields-map" class="fields-map"></div>
             <div class="map-legend">
-              <h4>Sports Legend</h4>
+              <h4 data-i18n="views.sportsLegend">Sports Legend</h4>
               <div class="legend-items">
                 <div class="legend-item">
                   <div class="legend-marker football"></div>
-                  <span>Football</span>
+                  <span data-i18n="sports.football">Football</span>
                 </div>
                 <div class="legend-item">
                   <div class="legend-marker tennis"></div>
-                  <span>Tennis</span>
+                  <span data-i18n="sports.tennis">Tennis</span>
                 </div>
                 <div class="legend-item">
                   <div class="legend-marker volleyball"></div>
-                  <span>Volleyball</span>
+                  <span data-i18n="sports.volleyball">Volleyball</span>
                 </div>
                 <div class="legend-item">
                   <div class="legend-marker basketball"></div>
-                  <span>Basketball</span>
+                  <span data-i18n="sports.basketball">Basketball</span>
                 </div>
                 <div class="legend-item">
                   <div class="legend-marker padel"></div>
-                  <span>Padel</span>
+                  <span data-i18n="sports.padel">Padel</span>
                 </div>
               </div>
             </div>
@@ -95,9 +102,9 @@
       </footer>
     </div>
 
-    <script type="module" src="/SportFieldsBookingHost/js/main.js"></script>
+    <script type="module" src="/js/main.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
-    <script type="module" src="/SportFieldsBookingHost/js/subscribed-fields.js"></script>
+    <script type="module" src="/js/subscribed-fields.js"></script>
   </body>
 </html>

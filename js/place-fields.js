@@ -1,12 +1,10 @@
-import { supabase, checkAuth, showElement, hideElement } from './main.js';
+import { supabase, checkAuth, showElement, hideElement, showMessageBox } from './main.js';
+import i18next from './translations.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
   // Check if user is authenticated
   const session = await checkAuth();
   if (!session) return;
-  
-  // Get user data
-  const userId = session.user.id;
   
   // Select DOM elements
   const protectedContent = document.querySelector('.protected-content');
@@ -44,15 +42,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     const newName = placeNameInput.value.trim();
     
     if (!newName) {
-      alert('Please enter a place name');
+      showMessageBox('Validation Error', 'Please enter a place name', 'error');
       return;
     }
     
     try {
       const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/places`, {
-        method: 'PATCH',
+        method: 'POST',
         headers: {
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+          'Authorization': `Bearer ${session.session.access_token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -70,13 +68,13 @@ document.addEventListener('DOMContentLoaded', async () => {
       
       placeData = data;
       placeNameElement.textContent = data.name;
-      
+
       hideElement(editPlaceNameForm);
       showElement(placeNameElement);
       showElement(editPlaceNameBtn);
     } catch (error) {
       console.error('Failed to update place name:', error);
-      alert('Failed to update place name. Please try again.');
+      showMessageBox('Error', 'Failed to update place name. Please try again.', 'error');
     }
   });
   
@@ -95,9 +93,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   
   async function loadPlaceData() {
     try {
-      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/places?user_id=${userId}`, {
+      const { data: { session } } = await supabase.auth.getSession();
+      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/places`, {
         headers: {
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+          'Authorization': `Bearer ${session.access_token}`,
         },
       });
 
@@ -115,18 +114,21 @@ document.addEventListener('DOMContentLoaded', async () => {
       placeNameElement.textContent = place.name;
       
       // Show phone numbers (primary and secondary if available)
-      let phoneText = `Phone: ${place.phone_number || 'Not provided'}`;
-      
+      let phoneText = `${i18next.t("contact.phone")}: ${place.phone_number || 'Not provided'}`;
+
       // Get user data to check for secondary phone
       try {
-        const { data: userData, error: userError } = await supabase
-          .from('users')
-          .select('secondary_phone')
-          .eq('id', userId)
-          .single();
+        const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/get-user-role`, {
+          headers: {
+            'Authorization': `Bearer ${session.access_token}`,
+          },
+        });
         
-        if (!userError && userData?.secondary_phone) {
-          phoneText += ` | Secondary: ${userData.secondary_phone}`;
+        if (response.ok) {
+          const userData = await response.json();
+          if (userData.secondary_phone) {
+            phoneText += ` | Secondary: ${userData.secondary_phone}`;
+          }
         }
       } catch (error) {
         console.log('Could not fetch secondary phone:', error);
@@ -139,7 +141,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       await loadFieldsData();
     } catch (error) {
       console.error('Error loading place data:', error);
-      alert('Failed to load place data. Please refresh the page.');
+      showMessageBox('Error', 'Failed to load place data. Please refresh the page.', 'error');
     }
   }
   
@@ -165,7 +167,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       renderFields(fields);
     } catch (error) {
       console.error('Error loading fields:', error);
-      alert('Failed to load fields. Please refresh the page.');
+      showMessageBox('Error', 'Failed to load fields. Please refresh the page.', 'error');
     }
   }
   
@@ -180,7 +182,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     let html = '';
     
     fields.forEach(field => {
-      const sportType = field.sport_type.charAt(0).toUpperCase() + field.sport_type.slice(1);
+      const sportType = (field.sport_type.charAt(0).toUpperCase() + field.sport_type.slice(1)).toLowerCase();
       
       // Use the first image from the images array or a default
       const imageUrl = field.images && field.images.length > 0
@@ -190,7 +192,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       html += `
         <div class="field-item" onclick="window.location.href='/field-form.html?place_id=${placeData.id}&field_id=${field.id}'">
           <div class="field-item-image" style="background-image: url('${imageUrl}')">
-            <span class="field-item-sport">${sportType}</span>
+            <span class="field-item-sport" data-i18n="sports.${sportType}">${i18next.t("sports."+sportType)}</span>
           </div>
           <div class="field-item-content">
             <h4 class="field-item-title">${field.name}</h4>

@@ -52,7 +52,16 @@
 
 /* Place Search */
 .place-search {
+  border: 2px solid var(--color-divider);
+  border-radius: var(--border-radius-md);
+  padding: var(--space-3);
   margin-bottom: var(--space-3);
+  background-color: var(--color-background-light);
+  transition: border-color var(--transition-fast);
+}
+
+.place-search:hover {
+  border-color: var(--color-primary-light);
 }
 
 .place-search-input {
@@ -86,9 +95,18 @@
 
 /* Field Search Form */
 #search-form {
+  border: 2px solid var(--color-divider);
+  border-radius: var(--border-radius-md);
+  padding: var(--space-3);
+  background-color: var(--color-background-light);
+  transition: border-color var(--transition-fast);
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: var(--space-3);
+}
+
+#search-form:hover {
+  border-color: var(--color-primary-light);
 }
 
 #search-form .form-group:nth-child(4),

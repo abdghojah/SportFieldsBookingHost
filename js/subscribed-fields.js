@@ -1,4 +1,24 @@
 import { SPORTS, formatPrice } from './main.js';
+import i18next from './translations.js';
+
+// Import updateTranslations function from main.js
+function updateTranslations() {
+  document.querySelectorAll('[data-i18n]').forEach(element => {
+    const key = element.getAttribute('data-i18n');
+    const options = element.getAttribute('data-i18n-options');
+    
+    // Handle array access for nested translations
+    if (key.includes('.items.')) {
+      const [baseKey, itemIndex] = key.split('.items.');
+      const items = i18next.t(baseKey + '.items', { returnObjects: true });
+      if (Array.isArray(items) && items[itemIndex]) {
+        element.textContent = items[itemIndex];
+      }
+    } else {
+      element.textContent = i18next.t(key, options ? JSON.parse(options) : undefined);
+    }
+  });
+}
 
 document.addEventListener('DOMContentLoaded', async () => {
   const placesList = document.getElementById('places-list');
@@ -24,6 +44,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Initialize view toggle
   listViewBtn.addEventListener('click', () => switchToListView());
   mapViewBtn.addEventListener('click', () => switchToMapView());
+  
+  // Listen for language changes to update translations
+  document.addEventListener('languageChanged', () => {
+    updateTranslations();
+    // Re-render places list to update sport counts
+    if (fieldsData.length > 0) {
+      renderPlacesList(fieldsData);
+    }
+  });
   
   // Load data
   await loadFieldsData();
@@ -160,17 +189,17 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
   
   function createPopupContent(field, place) {
-    const sportName = SPORTS[field.sport_type] || field.sport_type;
-    const priceText = formatPrice(field.price_per_hour);
+    const sportName = i18next.t(`sports.${field.sport_type}`);
+    const priceText = `${formatPrice(field.price_per_hour)} ${i18next.t('field.pricePerHour')}`;
     
     return `
       <div class="popup-content">
         <div class="popup-title">${field.name}</div>
         <div class="popup-place">${place.name}</div>
         <div class="popup-sport">${sportName}</div>
-        <div class="popup-price">${priceText}/hour</div>
+        <div class="popup-price">${priceText}</div>
         <a href="/reserve.html?id=${field.id}" class="popup-button" target="_blank">
-          Reserve Field
+          ${i18next.t('views.reserveField')}
         </a>
       </div>
     `;
@@ -225,7 +254,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const sportBadges = Object.entries(sportCounts)
         .map(([sport, count]) => `
           <span class="place-card-stat">
-            ${SPORTS[sport]}: ${count} field${count > 1 ? 's' : ''}
+            ${i18next.t(`sports.${sport}`)}: ${i18next.t(count > 1 ? 'views.fieldsCountPlural' : 'views.fieldsCount', { count })}
           </span>
         `)
         .join('');

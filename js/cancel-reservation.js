@@ -1,21 +1,51 @@
-import { supabase, formatTime, formatDate, formatTimeRange, formatPrice, checkAuth, showElement, hideElement, showError } from './main.js';
+import { supabase, formatTime, formatDate, formatTimeRange, formatPrice, checkAuth, showElement, hideElement, showError, showMessageBox } from './main.js';
 import i18next from './translations.js';
+
+// Import updateTranslations function
+function updateTranslations() {
+  document.querySelectorAll('[data-i18n]').forEach(element => {
+    const key = element.getAttribute('data-i18n');
+    const options = element.getAttribute('data-i18n-options');
+    
+    // Handle array access for nested translations
+    if (key.includes('.items.')) {
+      const [baseKey, itemIndex] = key.split('.items.');
+      const items = i18next.t(baseKey + '.items', { returnObjects: true });
+      if (Array.isArray(items) && items[itemIndex]) {
+        element.textContent = items[itemIndex];
+      }
+    } else {
+      element.textContent = i18next.t(key, options ? JSON.parse(options) : undefined);
+    }
+  });
+}
 
 document.addEventListener('DOMContentLoaded', async () => {
   // Check if user is authenticated and is a player
   const session = await checkAuth();
   if (!session) return;
 
-  // Verify user is a player
-  const { data: userData, error: userError } = await supabase
-    .from('users')
-    .select('role, phone')
-    .eq('id', session.user.id)
-    .single();
+  // Get user role via edge function
+  const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/get-user-role`, {
+    headers: {
+      'Authorization': `Bearer ${session.session.access_token}`,
+    },
+  });
 
-  if (userError || userData.role !== 'player') {
-    alert('Access denied. This page is only for players.');
-    window.location.href = '/';
+  if (!response.ok) {
+    const error = await response.json();
+    showMessageBox('Error', error.message || 'Failed to get user role', 'error', () => {
+      window.location.href = '/';
+    });
+    return;
+  }
+
+  const userData = await response.json();
+
+  if (userData.role !== 'player') {
+    showMessageBox('Access Denied', 'This page is only for players.', 'error', () => {
+      window.location.href = '/';
+    });
     return;
   }
 
@@ -50,15 +80,23 @@ document.addEventListener('DOMContentLoaded', async () => {
   fromDateInput.value = thirtyDaysAgo.toISOString().split('T')[0];
   toDateInput.value = thirtyDaysFromNow.toISOString().split('T')[0];
   
-  // Update status filter options with new statuses
-  statusFilterSelect.innerHTML = `
-    <option value="">All Statuses</option>
-    <option value="Paid">Paid</option>
-    <option value="Waiting_Payment">Waiting Payment</option>
-    <option value="No_Payment">No Payment</option>
-    <option value="User_Cancelled">User Cancelled</option>
-    <option value="Admin_Cancelled">Admin Cancelled</option>
-  `;
+  // Update status filter options with localized text
+  function updateStatusFilterOptions() {
+    statusFilterSelect.innerHTML = `
+      <option value="">${i18next.t('common.status.allStatuses')}</option>
+      <option value="Paid">${i18next.t('common.status.paid')}</option>
+      <option value="Waiting_Payment">${i18next.t('common.status.waitingPayment')}</option>
+      <option value="No_Payment">${i18next.t('common.status.noPayment')}</option>
+      <option value="User_Cancelled">${i18next.t('common.status.userCancelled')}</option>
+      <option value="Admin_Cancelled">${i18next.t('common.status.adminCancelled')}</option>
+    `;
+  }
+  
+  // Initialize status options
+  updateStatusFilterOptions();
+  
+  // Update status options when language changes
+  document.addEventListener('languageChanged', updateStatusFilterOptions);
   
   // Load initial reservations
   await loadReservations();
@@ -153,6 +191,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     let html = '';
     
     reservations.forEach(reservation => {
+      console.log(JSON.stringify({
+          reservation
+        }));
       const formattedDate = formatDate(reservation.date);
       const timeRange = formatTimeRange(reservation.time_from, reservation.time_to);
       
@@ -164,8 +205,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       const canCancel = hoursUntilReservation > 12 && !reservation.is_cancelled && 
                        !reservation.status.includes('Cancelled');
       
-      // Format status for display
-      const statusDisplay = getStatusDisplay(reservation.status);
+      // Format status for display with localization
+      const statusDisplay = getLocalizedStatusDisplay(reservation.status);
       
       html += `
         <div class="reservation-item" data-id="${reservation.id}">
@@ -175,34 +216,38 @@ document.addEventListener('DOMContentLoaded', async () => {
           </div>
           <div class="reservation-details">
             <div class="reservation-detail">
-              <div class="reservation-detail-label">Time</div>
+              <div class="reservation-detail-label" data-i18n="reservation.time">Time</div>
               <div>${timeRange}</div>
             </div>
             <div class="reservation-detail">
-              <div class="reservation-detail-label">Sport</div>
-              <div>${capitalizeFirstLetter(reservation.fields.sport_type)}</div>
+              <div class="reservation-detail-label" data-i18n="reservation.sport">Sport</div>
+              <div data-i18n="sports.${reservation.fields.sport_type}">${capitalizeFirstLetter(reservation.fields.sport_type)}</div>
             </div>
             <div class="reservation-detail">
-              <div class="reservation-detail-label">Place</div>
+              <div class="reservation-detail-label" data-i18n="reservation.place">Place</div>
               <div>${reservation.fields.places.name}</div>
             </div>
             <div class="reservation-detail">
-              <div class="reservation-detail-label">Total Price</div>
+              <div class="reservation-detail-label" data-i18n="reservation.totalPrice">Total Price</div>
               <div>${formatPrice(reservation.totalPrice)}</div>
             </div>
             <div class="reservation-detail">
-              <div class="reservation-detail-label">Status</div>
+              <div class="reservation-detail-label" data-i18n="reservation.reservationFee">Reservation Fee</div>
+              <div>${reservation.fee}</div>
+            </div>
+            <div class="reservation-detail">
+              <div class="reservation-detail-label" data-i18n="reservation.status">Status</div>
               <div class="status-${reservation.status}">${statusDisplay}</div>
             </div>
             <div class="reservation-detail">
-              <div class="reservation-detail-label">Reservation ID</div>
+              <div class="reservation-detail-label" data-i18n="reservation.reservationId">Reservation ID</div>
               <div>${reservation.id}</div>
             </div>
           </div>
           <div class="reservation-actions">
             ${canCancel ? 
               '<button class="btn btn-danger reservation-cancel-btn">Cancel Reservation</button>' : 
-              '<span class="helper-text">Cannot cancel (less than 12 hours or already cancelled)</span>'
+              `<span class="helper-text" data-i18n="reservation.cannotCancelNotice">Cannot cancel (less than 12 hours or already cancelled)</span>`
             }
           </div>
         </div>
@@ -210,6 +255,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
     
     reservationsList.innerHTML = html;
+    
+    // Update translations for dynamically added elements
+    updateTranslations();
     
     // Add click event to cancel buttons
     const cancelButtons = document.querySelectorAll('.reservation-cancel-btn');
@@ -227,7 +275,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/player-cancel-reservation`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${session.session.access_token}`,
+          'Authorization': `Bearer ${session.access_token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -245,7 +293,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       // Reload reservations to show updated status
       await loadReservations(fromDateInput.value, toDateInput.value, statusFilterSelect.value);
       
-      alert('Reservation cancelled successfully!');
+      showMessageBox('Success', 'Reservation cancelled successfully!', 'success');
     } catch (error) {
       console.error('Error cancelling reservation:', error);
       hideElement(cancelConfirmation);
@@ -253,13 +301,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
   
-  function getStatusDisplay(status) {
+  function getLocalizedStatusDisplay(status) {
     const statusMap = {
-      'Paid': 'Paid',
-      'Waiting_Payment': 'Waiting Payment',
-      'No_Payment': 'No Payment',
-      'User_Cancelled': 'User Cancelled',
-      'Admin_Cancelled': 'Admin Cancelled'
+      'Paid': i18next.t('common.status.paid'),
+      'Waiting_Payment': i18next.t('common.status.waitingPayment'),
+      'No_Payment': i18next.t('common.status.noPayment'),
+      'User_Cancelled': i18next.t('common.status.userCancelled'),
+      'Admin_Cancelled': i18next.t('common.status.adminCancelled')
     };
     return statusMap[status] || status;
   }

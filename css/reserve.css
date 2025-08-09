@@ -134,6 +134,24 @@
   border-radius: var(--border-radius-md);
 }
 
+/* Enhanced Error Message Styling */
+#reservation-error {
+  background-color: rgba(244, 67, 54, 0.1);
+  border: 1px solid var(--color-error);
+  border-radius: var(--border-radius-md);
+  padding: var(--space-2);
+  margin: var(--space-2) 0;
+  color: var(--color-error-dark);
+  font-weight: 500;
+  text-align: center;
+  animation: fadeIn var(--transition-normal) forwards;
+}
+
+#reservation-error::before {
+  content: "⚠️ ";
+  margin-right: 0.5rem;
+}
+
 .reservation-content {
   display: grid;
   grid-template-columns: 1fr 1fr;

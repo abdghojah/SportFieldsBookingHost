@@ -18,12 +18,15 @@
     <div class="app-container">
       <header class="main-header">
         <div class="logo">
-          <a href="/SportFieldsBookingHost/"><h1>SportSpot</h1></a>
+          <a href="/"><h1>SportSpot</h1></a>
         </div>
         <nav class="main-nav">
           <ul>
-            <li><a href="/SportFieldsBookingHost/" data-i18n="nav.home">Home</a></li>
-            <li><a href="/SportFieldsBookingHost/how-it-works.html" data-i18n="nav.howItWorks">How it Works</a></li>
+            <li><a href="/" data-i18n="nav.home">Home</a></li>
+            <li id="manage-reservation-nav" class="hidden"><a href="/cancel-reservation.html" data-i18n="nav.manageReservation">Manage Reservation</a></li>
+            <li><a href="/how-it-works.html" data-i18n="nav.howItWorks">How it Works</a></li>
+            <li id="login-nav"><a href="/login.html" data-i18n="nav.login">Login</a></li>
+            <li id="logout-nav" class="hidden"><a href="#" id="logout-btn" data-i18n="nav.logout">Logout</a></li>
             <li>
               <select id="language-select">
                 <option value="en">English</option>
@@ -32,6 +35,13 @@
             </li>
           </ul>
         </nav>
+        <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle mobile menu">
+          <div class="hamburger-icon">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </button>
       </header>
 
       <main>
@@ -62,7 +72,7 @@
               </div>
               
               <div class="field-info-item">
-                <h3 data-i18n="field.price">Price</h3>
+                <h3 data-i18n="field.price"></h3>
                 <p id="price"></p>
               </div>
               
@@ -83,6 +93,7 @@
           <div class="reservation-header">
             <h2 data-i18n="reservation.title">Reserve This Field</h2>
             <p class="helper-text important" data-i18n="reservation.cancelNotice">Important: Reservations must be cancelled at least 12 hours before the start time.</p>
+            <div id="reservation-error" class="error-message hidden"></div>
           </div>
           
           <div class="reservation-content">
@@ -101,21 +112,28 @@
                 
                 <div id="blocked-times-info-item" class="time-info-item hidden">
                   <h4 data-i18n="reservation.blockedTimes">Blocked Times</h4>
-                  <div id="blocked-times-info">No blocked times for this day</div>
+                  <div id="blocked-times-info" data-i18n="reservation.noBlockedDaysForDay">No blocked times for this day</div>
                 </div>
                 
                 <div class="time-info-item">
                   <h4 data-i18n="reservation.existingReservations">Existing Reservations</h4>
-                  <div id="reservations-info">No reservations for this day</div>
+                  <div id="reservations-info" data-i18n="reservation.noReservationsForDay">No reservations for this day</div>
                 </div>
                 
                 <div class="time-selection">
                   <h4 data-i18n="reservation.selectTimeRange">Select Time Range</h4>
                   <div class="time-range">
+                    <label data-i18n="common.time">Time</label>
                     <div class="time-inputs">
-                      <input type="time" id="time-from" name="timeFrom" required>
-                      <span data-i18n="common.to">to</span>
-                      <input type="time" id="time-to" name="timeTo" required>
+                      <div class="time-input-group">
+                        <label for="time-from" data-i18n="common.timeFrom">From</label>
+                        <input type="time" id="time-from" name="timeFrom" required>
+                      </div>
+                      <span class="time-separator" data-i18n="common.to">to</span>
+                      <div class="time-input-group">
+                        <label for="time-to" data-i18n="common.timeTo">To</label>
+                        <input type="time" id="time-to" name="timeTo" required>
+                      </div>
                     </div>
                   </div>
                   <p class="helper-text">
@@ -128,10 +146,8 @@
             
             <div id="reservation-form-container" class="reservation-form-container hidden">
               <h3 data-i18n="reservation.details">Reservation Details</h3>
-              <div id="reservation-error" class="error-message hidden"></div>
-              
-              <div class="payment-notice">
-                <p>To confirm your reservation, you must pay a 1 JD reservation fee (separate from field fees) to cliq "AbdGH" within one hour or the reservation will be cancelled.</p>
+              <div class="payment-notice" data-i18n="reservation.paymentNotice">
+                <p>To confirm your reservation, you must pay a reservation fee (max 1 JD, separate from field fees) to cliq "AbdGH" within one hour or the reservation will be cancelled.</p>
               </div>
               
               <div id="selected-slot-info" class="selected-slot-info">
@@ -142,7 +158,7 @@
               
               <form id="login-form">
                 <h4 data-i18n="auth.playerLogin">Player Login Required</h4>
-                <p class="helper-text">Please login with your player account to make a reservation</p>
+                <p class="helper-text" data-i18n="reservation.playerLoginRequired">Please login with your player account to make a reservation</p>
                 
                 <div class="form-group">
                   <label for="login-phone" data-i18n="auth.phone">Phone Number</label>
@@ -171,7 +187,7 @@
                   <span data-i18n="reservation.reservationId">Reservation ID</span>: 
                   <span id="reservation-id"></span>
                 </p>
-                <p data-i18n="reservation.cancelInfo">You can cancel this reservation up to 12 hours before the start time by visiting the <a href="/SportFieldsBookingHost/cancel-reservation.html">Manage Reservation</a> page.</p>
+                <p data-i18n="reservation.cancelInfo">You can cancel this reservation up to 12 hours before the start time by visiting the <a href="/cancel-reservation.html">Manage Reservation</a> page.</p>
               </div>
             </div>
           </div>
@@ -185,8 +201,19 @@
       </footer>
     </div>
 
-    <script type="module" src="/SportFieldsBookingHost/js/main.js"></script>
-    <script type="module" src="/SportFieldsBookingHost/js/reserve.js"></script>
+    <div id="logout-confirmation" class="modal hidden">
+      <div class="modal-content">
+        <h3 data-i18n="auth.confirmLogout">Confirm Logout</h3>
+        <p data-i18n="auth.logoutWarning">Are you sure you want to logout?</p>
+        <div class="modal-actions">
+          <button id="confirm-logout-btn" class="btn btn-primary" data-i18n="nav.logout">Logout</button>
+          <button id="cancel-logout-btn" class="btn btn-secondary" data-i18n="common.cancel">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/js/main.js"></script>
+    <script type="module" src="/js/reserve.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   </body>
 </html>

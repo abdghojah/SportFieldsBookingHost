@@ -10,20 +10,20 @@
         document.body.removeAttribute("hidden");
       });
     </script>
-    <link rel="stylesheet" href="/SportFieldsBookingHost/css/style.css" />
-    <link rel="stylesheet" href="/SportFieldsBookingHost/css/auth.css" />
-    <link rel="stylesheet" href="/SportFieldsBookingHost/css/owner-signup.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/auth.css" />
+    <link rel="stylesheet" href="/css/owner-signup.css" />
   </head>
   <body hidden>
     <div class="app-container">
       <header class="main-header">
         <div class="logo">
-          <a href="/SportFieldsBookingHost/"><h1>SportSpot</h1></a>
+          <a href="/"><h1>SportSpot</h1></a>
         </div>
         <nav class="main-nav">
           <ul>
-            <li><a href="/SportFieldsBookingHost/" data-i18n="nav.home">Home</a></li>
-            <li><a href="/SportFieldsBookingHost/login.html" data-i18n="nav.login">Login</a></li>
+            <li><a href="/" data-i18n="nav.home">Home</a></li>
+            <li><a href="/login.html" data-i18n="nav.login">Login</a></li>
             <li>
               <select id="language-select">
                 <option value="en">English</option>
@@ -32,6 +32,13 @@
             </li>
           </ul>
         </nav>
+        <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle mobile menu">
+          <div class="hamburger-icon">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </button>
       </header>
 
       <main>
@@ -56,8 +63,9 @@
                 <input 
                   type="tel" 
                   id="identifier" 
-                  name="identifier" 
-                  placeholder="Enter phone number (07xxxxxxxx)" 
+                  name="identifier"
+                  data-i18n-placeholder="auth.phoneNumberPlaceHolder"
+                  placeholder="" 
                   pattern="07[0-9]{8}"
                   required
                 >
@@ -80,7 +88,8 @@
                   type="tel" 
                   id="secondary-phone" 
                   name="secondaryPhone" 
-                  placeholder="Enter secondary phone number (07xxxxxxxx)" 
+                  data-i18n-placeholder="auth.phoneNumberPlaceHolder"
+                  placeholder="" 
                   pattern="07[0-9]{8}"
                 >
                 <p class="helper-text" data-i18n="auth.secondaryPhoneHelp">Optional secondary contact number</p>
@@ -91,8 +100,9 @@
                 <input 
                   type="password" 
                   id="password" 
-                  name="password" 
-                  placeholder="Enter your password" 
+                  name="password"
+                  data-i18n-placeholder="auth.passwordPlaceHolder"
+                  placeholder="" 
                   required
                 >
               </div>
@@ -101,8 +111,9 @@
                 <input 
                   type="password" 
                   id="confirm-password" 
-                  name="confirmPassword" 
-                  placeholder="Confirm your password" 
+                  name="confirmPassword"
+                  data-i18n-placeholder="auth.confirmPasswordPlaceHolder"
+                  placeholder=""
                   required
                 >
               </div>
@@ -131,7 +142,7 @@
             </form>
             
             <div class="auth-links">
-              <a href="/SportFieldsBookingHost/login.html" data-i18n="auth.haveAccount">Already have an account? Login</a>
+              <a href="/login.html" data-i18n="auth.haveAccount">Already have an account? Login</a>
             </div>
           </div>
         </section>
@@ -144,7 +155,7 @@
       </footer>
     </div>
 
-    <script type="module" src="/SportFieldsBookingHost/js/main.js"></script>
-    <script type="module" src="/SportFieldsBookingHost/js/owner-signup.js"></script>
+    <script type="module" src="/js/main.js"></script>
+    <script type="module" src="/js/owner-signup.js"></script>
   </body>
 </html>

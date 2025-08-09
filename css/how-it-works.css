@@ -51,6 +51,41 @@
   margin-bottom: var(--space-1);
 }
 
+/* Arabic RTL Support */
+[lang="ar"] .how-it-works-section,
+.how-it-works-section[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+}
+
+[lang="ar"] .step,
+.step[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+}
+
+[lang="ar"] .step h3,
+.step[dir="rtl"] h3 {
+  text-align: right;
+}
+
+[lang="ar"] .step p,
+.step[dir="rtl"] p {
+  text-align: right;
+}
+
+[lang="ar"] .step ul,
+.step[dir="rtl"] ul {
+  margin-left: 0;
+  margin-right: var(--space-4);
+  text-align: right;
+}
+
+[lang="ar"] .step li,
+.step[dir="rtl"] li {
+  text-align: right;
+}
+
 /* Responsive Adjustments */
 @media (max-width: 768px) {
   .how-it-works-section {
@@ -59,5 +94,11 @@
   
   .step {
     padding: var(--space-2);
+  }
+  
+  /* Arabic mobile adjustments */
+  [lang="ar"] .step ul,
+  .step[dir="rtl"] ul {
+    margin-right: var(--space-2);
   }
 }

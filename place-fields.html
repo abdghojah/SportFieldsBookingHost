@@ -10,14 +10,14 @@
         document.body.removeAttribute("hidden");
       });
     </script>
-    <link rel="stylesheet" href="/SportFieldsBookingHost/css/style.css" />
-    <link rel="stylesheet" href="/SportFieldsBookingHost/css/place-fields.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/place-fields.css" />
   </head>
   <body hidden>
     <div class="app-container" id="app">
       <header class="main-header">
         <div class="logo">
-          <a href="/SportFieldsBookingHost/"><h1>SportSpot</h1></a>
+          <a href="/"><h1>SportSpot</h1></a>
         </div>
         <nav class="main-nav">
           <ul>
@@ -30,6 +30,13 @@
             </li>
           </ul>
         </nav>
+        <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle mobile menu">
+          <div class="hamburger-icon">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </button>
       </header>
 
       <main class="protected-content hidden">
@@ -80,7 +87,7 @@
       </footer>
     </div>
 
-    <script type="module" src="/SportFieldsBookingHost/js/main.js"></script>
-    <script type="module" src="/SportFieldsBookingHost/js/place-fields.js"></script>
+    <script type="module" src="/js/main.js"></script>
+    <script type="module" src="/js/place-fields.js"></script>
   </body>
 </html>
