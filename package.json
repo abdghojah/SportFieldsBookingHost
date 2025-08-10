@@ -7,8 +7,7 @@
     "dev": "vite",
     "prebuild": "rimraf dist",
     "build": "vite build",
-    "preview": "vite preview",
-    "postbuild": "copyfiles -u 0 \"**/*.{css,html,js,env}\" ./dist --exclude=node_modules/** --exclude=dist/** --exclude=public/**"
+    "preview": "vite preview"
   },
   "devDependencies": {
     "vite": "^7.1.0",
