@@ -12,6 +12,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   const params = new URLSearchParams(window.location.search);
   const placeId = params.get('place_id');
   const fieldId = params.get('field_id');
+  console.log("field id : " + fieldId);
+  console.log("place id : " + placeId);
   
   if (!placeId) {
     window.location.href = '/place-fields.html';
