@@ -45,6 +45,10 @@
       </header>
 
       <main>
+        <!-- Loading Indicator -->
+        <div id="loading-indicator" class="loading-indicator hidden">
+          <div class="spinner"></div>
+        </div>
         <section class="field-details-section">
           <div class="field-header">
             <h2 id="field-name"></h2>
@@ -93,7 +97,6 @@
           <div class="reservation-header">
             <h2 data-i18n="reservation.title">Reserve This Field</h2>
             <p class="helper-text important" data-i18n="reservation.cancelNotice">Important: Reservations must be cancelled at least 12 hours before the start time.</p>
-            <div id="reservation-error" class="error-message hidden"></div>
           </div>
           
           <div class="reservation-content">
@@ -108,6 +111,10 @@
                 <div id="time-pattern-info-item" class="time-info-item hidden">
                   <h4 data-i18n="reservation.timePattern">Time Pattern</h4>
                   <p id="time-pattern-info">No specific time pattern</p>
+                  <p class="helper-text" data-i18n="field.patterenExample">
+                  Example: "Every 2 hours starting from 4:00" means slots like 4:00-6:00, 6:00-8:00 are allowed,
+                  but 4:30-6:30 is not.
+                  </p>
                 </div>
                 
                 <div id="blocked-times-info-item" class="time-info-item hidden">
@@ -142,6 +149,7 @@
                   </p>
                 </div>
               </div>
+              <div id="reservation-error" class="error-message hidden"></div>
             </div>
             
             <div id="reservation-form-container" class="reservation-form-container hidden">

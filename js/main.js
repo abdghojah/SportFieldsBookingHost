@@ -402,6 +402,13 @@ export async function logout() {
   }
 }
 
+export function showLoading() {
+  document.getElementById('loading-indicator').classList.remove('hidden');
+}
+export function hideLoading() {
+  document.getElementById('loading-indicator').classList.add('hidden');
+}
+
 // Navigation visibility management
 export async function updateNavigationVisibility() {
   try {

@@ -55,6 +55,27 @@
 /* Time Blocks */
 .time-blocks-container {
   margin-bottom: var(--space-2);
+  border: 2px solid var(--color-divider);
+  border-radius: var(--border-radius-md);
+  padding: var(--space-2);
+  background-color: var(--color-background-light);
+}
+
+.time-blocks-container:hover {
+  border-color: var(--color-primary-light);
+}
+
+/* Discount Blocks Container */
+#discount-blocks-container {
+  border: 2px solid var(--color-divider);
+  border-radius: var(--border-radius-md);
+  padding: var(--space-2);
+  background-color: var(--color-background-light);
+  margin-bottom: var(--space-2);
+}
+
+#discount-blocks-container:hover {
+  border-color: var(--color-primary-light);
 }
 
 .time-block,
@@ -289,5 +310,26 @@ body.rtl .image-preview-remove {
   body.rtl .form-group textarea {
     width: 100%;
     text-align: right;
+  }
+
+  /* Fix discount block mobile layout to match time blocks */
+  .discount-block {
+    flex-direction: column;
+    gap: var(--space-1);
+    align-items: stretch;
+  }
+
+  .discount-percentage {
+    width: 100%;
+  }
+
+  .discount-percentage label {
+    display: block;
+    width: 100%;
+    margin-bottom: var(--space-1);
+  }
+
+  .discount-percentage input {
+    width: 100%;
   }
 }

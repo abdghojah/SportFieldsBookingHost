@@ -1,4 +1,4 @@
-import { SPORTS, showElement, hideElement, showMessageBox } from './main.js';
+import { SPORTS, showElement, hideElement, showMessageBox, showLoading, hideLoading } from './main.js';
 import i18next from './translations.js';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     try {
+      showLoading();
       // Show loading state
       placesList.innerHTML = '<p class="no-results">Searching places...</p>';
       showElement(placeResults);
@@ -41,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const places = await response.json();
       
       if (!places || places.length === 0) {
+        hideLoading();
         placesList.innerHTML = '<p class="no-results">No places found matching your search.</p>';
         
         // Scroll to results section even when no results found
@@ -84,6 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
       
       placesList.innerHTML = html;
 
+      hideLoading();
       // Scroll to results section
       const resultsSection = document.querySelector('.results-section');
       if (resultsSection) {
@@ -91,6 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       
     } catch (error) {
+      hideLoading();
       console.error('Error searching places:', error);
       placesList.innerHTML = '<p class="error-message">Failed to search places. Please try again.</p>';
     }

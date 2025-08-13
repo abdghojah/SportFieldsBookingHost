@@ -71,41 +71,7 @@
               <button id="filter-reservations-btn" class="btn btn-primary" data-i18n="common.search">Search</button>
               <button id="clear-filter-btn" class="btn btn-secondary" data-i18n="common.clear">Clear</button>
             </div>
-            
-            <!-- Step 1: Enter phone number to request OTP (hidden for authenticated players) -->
-            <form id="request-otp-form" class="hidden">
-              <div class="form-group">
-                <label for="identifier" data-i18n="auth.phone">Phone Number</label>
-                <input 
-                  type="tel" 
-                  id="identifier" 
-                  name="identifier" 
-                  placeholder="07xxxxxxxx" 
-                  required
-                  pattern="07[0-9]{8}"
-                >
-                <p class="helper-text" data-i18n="reservation.phoneHelp">Enter the phone number used for your reservation</p>
-              </div>
-              <button type="submit" class="btn btn-primary btn-full" data-i18n="auth.requestCode">Request Verification Code</button>
-            </form>
-            
-            <!-- Step 2: Enter OTP (hidden for authenticated players) -->
-            <form id="verify-otp-form" class="hidden">
-              <div class="form-group">
-                <label for="otp" data-i18n="auth.verificationCode">Verification Code</label>
-                <input 
-                  type="text" 
-                  id="otp" 
-                  name="otp" 
-                  placeholder="Enter the code sent to you" 
-                  required
-                >
-              </div>
-              <div class="form-actions">
-                <button type="submit" class="btn btn-primary" data-i18n="auth.verify">Verify</button>
-                <button type="button" id="resend-otp-btn" class="btn btn-secondary" data-i18n="auth.resendCode">Resend Code</button>
-              </div>
-            </form>
+          
             
             <!-- Step 3: Reservations List -->
             <div id="reservations-container" class="reservations-container hidden">

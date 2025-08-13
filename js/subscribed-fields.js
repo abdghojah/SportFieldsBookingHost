@@ -1,4 +1,4 @@
-import { SPORTS, formatPrice } from './main.js';
+import { SPORTS, formatPrice, showLoading, hideLoading } from './main.js';
 import i18next from './translations.js';
 
 // Import updateTranslations function from main.js
@@ -27,7 +27,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   const listView = document.getElementById('list-view');
   const mapView = document.getElementById('map-view');
   const fieldsMapElement = document.getElementById('fields-map');
-  
+
+  showLoading();
+
   let fieldsMap = null;
   let markerClusterGroup = null;
   let fieldsData = [];
@@ -96,30 +98,38 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
   
   function initializeMap() {
-    // Initialize map centered on Jordan
-    fieldsMap = L.map(fieldsMapElement).setView([31.9539, 35.9106], 8);
-    
-    // Add tile layer
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(fieldsMap);
-    
-    // Initialize marker cluster group
-    markerClusterGroup = L.markerClusterGroup({
-      chunkedLoading: true,
-      maxClusterRadius: 50,
-      spiderfyOnMaxZoom: true,
-      showCoverageOnHover: false,
-      zoomToBoundsOnClick: true
-    });
-    
-    // Add markers for all fields
-    addFieldMarkersToMap();
-    
-    // Add cluster group to map
-    fieldsMap.addLayer(markerClusterGroup);
-    
-    console.log(`Added ${getTotalFieldsWithCoordinates()} field markers to map`);
+    try {
+      showLoading();
+      // Initialize map centered on Jordan
+      fieldsMap = L.map(fieldsMapElement).setView([31.9539, 35.9106], 8);
+      
+      // Add tile layer
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(fieldsMap);
+      
+      // Initialize marker cluster group
+      markerClusterGroup = L.markerClusterGroup({
+        chunkedLoading: true,
+        maxClusterRadius: 50,
+        spiderfyOnMaxZoom: true,
+        showCoverageOnHover: false,
+        zoomToBoundsOnClick: true
+      });
+      
+      // Add markers for all fields
+      addFieldMarkersToMap();
+      
+      // Add cluster group to map
+      fieldsMap.addLayer(markerClusterGroup);
+      
+      console.log(`Added ${getTotalFieldsWithCoordinates()} field markers to map`);
+      hideLoading();
+    }
+    catch(error) {
+      hideLoading();
+      console.error('Adding fields to map:', error);
+    }
   }
   
   function getTotalFieldsWithCoordinates() {
@@ -224,6 +234,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       console.log('Loaded places data:', places);
       
       if (!places || places.length === 0) {
+        hideLoading();
         placesList.innerHTML = '<p class="no-results">No places found.</p>';
         return;
       }
@@ -233,8 +244,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       
       // Render list view
       renderPlacesList(places);
-      
+      hideLoading();
     } catch (error) {
+      hideLoading();
       console.error('Error loading places:', error);
       placesList.innerHTML = '<p class="error-message">Failed to load places. Please try again.</p>';
     }

@@ -52,7 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const { error: sessionError } = await supabase.auth.setSession(result.session);
       
       if (sessionError) {
-        console.error('Failed to set session:', sessionError);
         throw sessionError;
       }
 

@@ -1,4 +1,4 @@
-import { supabase, SPORTS, formatPrice, formatTime, isValidJordanianPhone, showElement, hideElement, showError, formatJordanianPhone, showMessageBox } from './main.js';
+import { supabase, SPORTS, formatPrice, formatTime, isValidJordanianPhone, showElement, hideElement, showError, formatJordanianPhone, showMessageBox, showLoading, hideLoading } from './main.js';
 import { getLocalizedDistrict } from './districts.js';
 import i18next from './translations.js';
 import { updateNavigationVisibility } from './main.js';
@@ -65,7 +65,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   
   // Date selection
   reservationDateInput.addEventListener('change', () => {
+    showLoading();
     showTimeInfo(reservationDateInput.value);
+    hideLoading();
   });
   
   // Time range selection
@@ -91,6 +93,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     
     try {
+      showLoading();
       // Login player
       const formattedPhone = formatJordanianPhone(phone);
       
@@ -122,7 +125,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       // Create reservation
       await createReservation(data.session.access_token);
+      hideLoading();
     } catch (error) {
+      hideLoading();
       console.error('Error during login/reservation:', error);
       showError('reservation-error', error.message || 'Failed to login or create reservation');
     }
@@ -373,12 +378,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     hideElement(reservationFormContainer);
     
     try {
+      showLoading();
       // Validate date and time are not in the past
       const fromDate = new Date(`${currentDate}T${timeFrom}`);
       const toDate = new Date(`${currentDate}T${timeTo}`);
       const now = new Date();
       
       if (fromDate < now) {
+        hideLoading();
         reservationError.textContent = i18next.t('common.error.pastTime');
         showElement(reservationError);
         return;
@@ -397,6 +404,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       
       // Check minimum booking time
       if (durationHours < fieldData.min_booking_time) {
+        hideLoading();
         const plural = fieldData.min_booking_time > 1 ? 's' : '';
         const errorMsg = i18next.t('common.error.tooShort', { 
           hours: fieldData.min_booking_time,
@@ -423,6 +431,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Check if start time matches pattern
         const minutesSinceStart = (fromMinutes - startTimeMinutes) % patternMinutes;
         if (minutesSinceStart !== 0) {
+          hideLoading();
           const plural = hours > 1 ? 's' : '';
           const errorMsg = i18next.t('common.error.patternMismatch', {
             hours: hours,
@@ -441,6 +450,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Check if duration matches pattern
         const durationMinutes = toMinutes - fromMinutes;
         if (durationMinutes % patternMinutes !== 0) {
+          hideLoading();
           const plural = hours > 1 ? 's' : '';
           const errorMsg = i18next.t('common.error.durationPattern', {
             hours: hours,
@@ -462,6 +472,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       
       for (const block of blockedForDay) {
         if (hasTimeConflict(timeFrom, timeTo, block.from, block.to)) {
+          hideLoading();
           const errorMsg = i18next.t('common.error.blockedTime', {
             from: formatTime(block.from),
             to: formatTime(block.to)
@@ -496,6 +507,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (reservations) {
         for (const reservation of reservations) {
           if (hasTimeConflict(timeFrom, timeTo, reservation.time_from, reservation.time_to)) {
+            hideLoading();
             const errorMsg = i18next.t('common.error.alreadyBooked', {
               from: formatTime(reservation.time_from),
               to: formatTime(reservation.time_to)
@@ -520,10 +532,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       // Update selected slot info
       selectedSlotText.textContent = `${formatTime(timeFrom)} - ${formatTime(timeTo)}`;
       selectedSlotPrice.innerHTML = `<span data-i18n="reservation.totalLabel">${i18next.t('reservation.totalLabel')}</span> : ${formatPrice(totalPrice)}`;
-      
+
+      hideLoading();
       showElement(reservationFormContainer);
       
     } catch (error) {
+      hideLoading();
       console.error('Error validating time range:', error);
       const errorMsg = i18next.t('common.error.checkAvailability');
       console.log('Showing general error:', errorMsg);

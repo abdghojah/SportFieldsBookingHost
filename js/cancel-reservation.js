@@ -62,10 +62,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const clearFilterBtn = document.getElementById('clear-filter-btn');
   
   let selectedReservationId = null;
-  
-  // Hide OTP forms since player is already authenticated
-  hideElement(document.getElementById('request-otp-form'));
-  hideElement(document.getElementById('verify-otp-form'));
+
   
   // Show reservations container
   showElement(reservationsContainer);
@@ -246,7 +243,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           </div>
           <div class="reservation-actions">
             ${canCancel ? 
-              '<button class="btn btn-danger reservation-cancel-btn">Cancel Reservation</button>' : 
+              '<button class="btn btn-danger reservation-cancel-btn" data-i18n="reservation.cancelReservation">Cancel Reservation</button>' : 
               `<span class="helper-text" data-i18n="reservation.cannotCancelNotice">Cannot cancel (less than 12 hours or already cancelled)</span>`
             }
           </div>

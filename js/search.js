@@ -1,4 +1,4 @@
-import { supabase, SPORTS, formatPrice, formatTimeRange, showMessageBox, populateDistricts } from './main.js';
+import { supabase, SPORTS, formatPrice, formatTimeRange, showMessageBox, populateDistricts, showLoading, hideLoading } from './main.js';
 import { getLocalizedDistrict } from './districts.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -13,12 +13,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   const fieldTypeSelect = document.getElementById('field-type');
   
   // Populate sport types
-  Object.entries(SPORTS).forEach(([value, label]) => {
+  /*Object.entries(SPORTS).forEach(([value, label]) => {
     const option = document.createElement('option');
     option.value = value;
     option.textContent = label;
     sportTypeSelect.appendChild(option);
-  });
+  });*/
   
   // Set minimum date to today
   const today = new Date();
@@ -78,6 +78,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     
     try {
+      showLoading();
       // Add loading state
       searchResults.innerHTML = '<div class="loading-spinner"></div>';
       
@@ -116,12 +117,14 @@ document.addEventListener('DOMContentLoaded', async () => {
       // Render search results
       renderSearchResults(fields, date, timeFrom, timeTo);
 
+      hideLoading();
       // Scroll to results section
       const resultsSection = document.querySelector('.results-section');
       if (resultsSection) {
         resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     } catch (error) {
+      hideLoading();
       console.error('Search error:', error);
       searchResults.innerHTML = '<p class="error-message">Error searching for fields. Please try again.</p>';
       

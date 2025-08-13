@@ -1,4 +1,4 @@
-import { supabase, checkAuth, showElement, hideElement, showMessageBox } from './main.js';
+import { supabase, checkAuth, showElement, hideElement, showMessageBox, showLoading, hideLoading } from './main.js';
 import i18next from './translations.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -21,7 +21,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   
   let placeData = null;
   let fieldsData = [];
-  
+
+  showLoading();
+
   // Show the protected content
   showElement(protectedContent);
   
@@ -88,7 +90,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   addFieldBtn.addEventListener('click', () => {
     window.location.href = `/field-form.html?place_id=${placeData.id}`;
   });
-  
+
   // Functions
   
   async function loadPlaceData() {
@@ -139,7 +141,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       
       // Get fields for this place
       await loadFieldsData();
+      hideLoading();
     } catch (error) {
+      hideLoading();
       console.error('Error loading place data:', error);
       showMessageBox('Error', 'Failed to load place data. Please refresh the page.', 'error');
     }

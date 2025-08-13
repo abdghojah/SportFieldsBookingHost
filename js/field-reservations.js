@@ -1,4 +1,5 @@
-import { supabase, checkAuth, formatDate, formatTime, formatPrice, showElement, hideElement } from './main.js';
+import { supabase, checkAuth, formatDate, formatTime, formatPrice, showElement, hideElement, showLoading, hideLoading
+ } from './main.js';
 import i18next from './translations.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -49,7 +50,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       alert(i18next.t('common.error.invalidDateRange'));
       return;
     }
-    
+
     await loadReservations(fromDate, toDate);
   });
   
@@ -84,6 +85,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   
   async function loadReservations(fromDate, toDate) {
     try {
+      showLoading();
       const { data: { session } } = await supabase.auth.getSession();
       // Show loading state
       reservationsList.innerHTML = `<p class="no-results">${i18next.t('common.loading')}</p>`;
@@ -108,6 +110,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const reservations = await response.json();
       
       if (!reservations || reservations.length === 0) {
+        hideLoading();
         reservationsList.innerHTML = `<p class="no-results">${i18next.t('reservation.noReservations')}</p>`;
         return;
       }
@@ -158,7 +161,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       });
       
       reservationsList.innerHTML = html;
+      hideLoading();
     } catch (error) {
+      hideLoading();
       console.error('Error loading reservations:', error);
       reservationsList.innerHTML = `<p class="error-message">${i18next.t('common.error.loadReservations')}</p>`;
     }
