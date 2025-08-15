@@ -192,8 +192,7 @@ const resources = {
         successMessageWithFee: 'Your reservation is temporarily allocated. You must pay exactly {{fee}} {{currency}} as reservation fee to "AbdGH" via Cliq within one hour to confirm your booking, or it will be automatically cancelled.',
         reservationId: 'Reservation ID',
         reservationFee: 'Reservation Fee',
-        cancelInfo: 'You can cancel this reservation up to 12 hours before the start time by visiting the Manage Reservation page.',
-        cancelNotice: 'Important: Reservations must be cancelled at least 12 hours before the start time.',
+        cancelInfo: 'You can cancel this reservation by visiting the Manage Reservation page.',
         noReservationsForDay: 'No reserved time slots in this day',
         noBlockedDaysForDay: 'No blocked times for this day',
         noPatterenRequired: 'No specific time pattern',
@@ -216,7 +215,7 @@ const resources = {
         place: 'Place',
         totalPrice: 'Total Price',
         selectDateRange: 'Select a date range to view reservations',
-        cannotCancelNotice: 'Cannot cancel (less than 12 hours or already cancelled)'
+        cannotCancelNotice: 'Cannot cancel (already cancelled or old reservation)'
       },
 
       // Contact
@@ -521,8 +520,7 @@ const resources = {
         successMessageWithFee: 'تم حجز الملعب مؤقتاً. يجب دفع {{fee}} {{currency}} بالضبط كرسوم حجز إلى "AbdGH" عبر كليك خلال ساعة واحدة لتأكيد حجزك، وإلا سيتم إلغاؤه تلقائياً.',
         reservationId: 'رقم الحجز',
         reservationFee: 'رسوم الحجز',
-        cancelInfo: 'يمكنك إلغاء هذا الحجز قبل 12 ساعة من وقت البدء عن طريق زيارة صفحة إدارة الحجوزات.',
-        cancelNotice: 'هام: يجب إلغاء الحجوزات قبل 12 ساعة على الأقل من وقت البدء.',
+        cancelInfo: 'يمكنك إلغاء هذا الحجز عن طريق زيارة صفحة إدارة الحجوزات.',
         noReservationsForDay: 'لا يوجد اوقات محجوزة في هذا اليوم',
         noBlockedDaysForDay: 'لا يوجد اوقات ممنوعة في هذا اليوم',
         noPatterenRequired: 'لا يوجد نمظ معين مطلوب للوقت',
@@ -546,7 +544,7 @@ const resources = {
         place: 'المكان',
         totalPrice: 'السعر الإجمالي',
         selectDateRange: 'اختر نطاق تاريخ لعرض الحجوزات',
-        cannotCancelNotice: 'الالغاء غير ممكن (اقل من 12 ساعة او تم الغاءه مسبقا)'
+        cannotCancelNotice: 'الالغاء غير ممكن (تم الغاءه مسبقا او حجز قديم)'
       },
 
       // Contact

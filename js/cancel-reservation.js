@@ -193,13 +193,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         }));
       const formattedDate = formatDate(reservation.date);
       const timeRange = formatTimeRange(reservation.time_from, reservation.time_to);
-      
+
       // Check if reservation can be cancelled
       const reservationDate = new Date(`${reservation.date}T${reservation.time_from}`);
       const now = new Date();
-      const timeDiff = reservationDate.getTime() - now.getTime();
-      const hoursUntilReservation = timeDiff / (1000 * 60 * 60);
-      const canCancel = hoursUntilReservation > 12 && !reservation.is_cancelled && 
+      const canCancel = now.getTime() < reservationDate.getTime() && !reservation.is_cancelled && 
                        !reservation.status.includes('Cancelled');
       
       // Format status for display with localization
@@ -244,7 +242,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           <div class="reservation-actions">
             ${canCancel ? 
               '<button class="btn btn-danger reservation-cancel-btn" data-i18n="reservation.cancelReservation">Cancel Reservation</button>' : 
-              `<span class="helper-text" data-i18n="reservation.cannotCancelNotice">Cannot cancel (less than 12 hours or already cancelled)</span>`
+              `<span class="helper-text" data-i18n="reservation.cannotCancelNotice">Cannot cancel (already cancelled or old reservation)</span>`
             }
           </div>
         </div>
@@ -269,10 +267,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   
   async function cancelReservation(reservationId) {
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      
       const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/player-cancel-reservation`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${session.access_token}`,
+          'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
