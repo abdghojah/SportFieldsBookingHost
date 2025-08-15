@@ -391,6 +391,7 @@ export async function logout() {
     }
 
     await supabase.auth.signOut();
+    await supabase.auth.setSession(null);
     
     // Update navigation after logout
     updateNavigationVisibility();
