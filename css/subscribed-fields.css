@@ -227,7 +227,7 @@
 .popup-button {
   display: inline-block;
   padding: var(--space-1) var(--space-2);
-  background-color: var(--color-primary);
+  background-color: var(--color-background-dark);
   color: white;
   text-decoration: none;
   border-radius: var(--border-radius-md);

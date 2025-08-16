@@ -1,0 +1,26 @@
+{
+  "name": "SportSpot - سبورتسبوت",
+  "short_name": "SportSpot",
+  "description": "Your trusted platform sport fields reservation in Jordan - منصتك الموثوقة لحجز الملاعب الرياضية في الاردن",
+  "theme_color": "#FF6B6B",
+  "background_color": "#F8FAFC",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/index.html",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["business", "sport", "reservation", "booking"],
+  "lang": "ar",
+  "dir": "rtl"
+}

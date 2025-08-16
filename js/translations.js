@@ -189,7 +189,7 @@ const resources = {
         selectedSlot: 'Selected Time Slot',
         success: 'Reservation Made!',
         successMessage: 'Your reservation is temporarly allocated. You should pay reservation fee in one hour to avoid cancellation, once paid confirmation message will be sent.',
-        successMessageWithFee: 'Your reservation is temporarily allocated. You must pay exactly {{fee}} {{currency}} as reservation fee to "AbdGH" via Cliq within one hour to confirm your booking, or it will be automatically cancelled.',
+        successMessageWithFee: 'Your reservation is temporarily allocated. You must pay exactly {{fee}} {{currency}} as reservation fee to "SPORTSPOT" via Cliq within one hour to confirm your booking, or it will be automatically cancelled.',
         reservationId: 'Reservation ID',
         reservationFee: 'Reservation Fee',
         cancelInfo: 'You can cancel this reservation by visiting the Manage Reservation page.',
@@ -197,7 +197,7 @@ const resources = {
         noBlockedDaysForDay: 'No blocked times for this day',
         noPatterenRequired: 'No specific time pattern',
         playerLoginRequired: 'Please use your player account to make a reservation',
-        paymentNotice: 'To confirm your reservation, you must pay a reservation fee (max 1 JD, separate from field fees) to cliq "AbdGH" within one hour or the reservation will be cancelled.',
+        paymentNotice: 'To confirm your reservation, you must pay a reservation fee (max 1 JD exact value will be shown after reservation, separate from field fees) to cliq "SPORTSPOT" within one hour or the reservation will be cancelled.',
         totalLabel: 'Total',
         loginAndReserve: 'Reserve',
         manageTitle: 'Manage Reservations',
@@ -228,7 +228,7 @@ const resources = {
       },
 
       subscribedFields: {
-        title: 'Subscribed Fields',
+        title: 'All Fields',
         subtitle: 'Discover all the sports facilities that trust SportSpot'
       },
 
@@ -394,7 +394,7 @@ const resources = {
         manageReservation: 'إدارة الحجوزات',
         manageReservations: 'إدارة جميع الحجوزات',
         myFields: 'ملاعبي',
-        subscribedFields: 'قائمة الملاعب',
+        subscribedFields: 'جميع الملاعب',
         howItWorks: 'كيف يعمل الموقع'
       },
 
@@ -517,7 +517,7 @@ const resources = {
         selectedSlot: 'الوقت المختار',
         success: 'تم الحجز!',
         successMessage: 'سيتم حجز الملعب مؤقتا, يجب دفع رسوم الحجز خلال ساعة لتجنب الالغاء.',
-        successMessageWithFee: 'تم حجز الملعب مؤقتاً. يجب دفع {{fee}} {{currency}} بالضبط كرسوم حجز إلى "AbdGH" عبر كليك خلال ساعة واحدة لتأكيد حجزك، وإلا سيتم إلغاؤه تلقائياً.',
+        successMessageWithFee: 'تم حجز الملعب مؤقتاً. يجب دفع {{fee}} {{currency}} بالضبط كرسوم حجز إلى "SPORTSPOT" عبر كليك خلال ساعة واحدة لتأكيد حجزك، وإلا سيتم إلغاؤه تلقائياً.',
         reservationId: 'رقم الحجز',
         reservationFee: 'رسوم الحجز',
         cancelInfo: 'يمكنك إلغاء هذا الحجز عن طريق زيارة صفحة إدارة الحجوزات.',
@@ -525,8 +525,7 @@ const resources = {
         noBlockedDaysForDay: 'لا يوجد اوقات ممنوعة في هذا اليوم',
         noPatterenRequired: 'لا يوجد نمظ معين مطلوب للوقت',
         playerLoginRequired: 'الرجاء استخدام حساب لاعب للحجز',
-        paymentNotice: 'To confirm your reservation, you must pay a reservation fee (max 1 JD, separate from field fees) to cliq "AbdGH" within one hour or the reservation will be cancelled.',
-        paymentNotice: ' لتأكيد الحجز يجب دفع رسوم حجز (منفصل عن رسوم الملعب) بقيمة لا تتجاوز 1 دينار (القيمة بالضبط ستظهر بعد الحجز) لحساب كليك ABDGH خلال ساعة او سيتم الغاء الحجز ',
+        paymentNotice: ' لتأكيد الحجز يجب دفع رسوم حجز (منفصل عن رسوم الملعب) بقيمة لا تتجاوز 1 دينار (القيمة بالضبط ستظهر بعد الحجز) لحساب كليك SPORTSPOT خلال ساعة او سيتم الغاء الحجز ',
         totalLabel: 'المجموع',
         loginAndReserve: 'احجز',
         manageTitle: 'إدارة الحجوزات',
@@ -557,7 +556,7 @@ const resources = {
       },
 
       subscribedFields: {
-        title: 'الملاعب المشتركة',
+        title: 'جميع الملاعب',
         subtitle: 'اكتشف جميع المرافق الرياضية التي تثق في سبورت سبوت'
       },
 
