@@ -202,7 +202,7 @@ const resources = {
         loginAndReserve: 'Reserve',
         manageTitle: 'Manage Reservations',
         yourReservations: 'Your Reservations',
-        noReservations: 'You don\'t have any reservations for the selected criteria.',
+        noReservations: 'You don\'t have any reservations.',
         confirmCancel: 'Confirm Cancellation',
         cancelWarning: 'Are you sure you want to cancel this reservation? This action cannot be undone.',
         cancelReservation: 'Cancel Reservation',
@@ -215,7 +215,8 @@ const resources = {
         place: 'Place',
         totalPrice: 'Total Price',
         selectDateRange: 'Select a date range to view reservations',
-        cannotCancelNotice: 'Cannot cancel (already cancelled or old reservation)'
+        cannotCancelNotice: 'Cannot cancel (already cancelled or old reservation)',
+        dateNote: 'You can search only last 30 days'
       },
 
       // Contact
@@ -530,7 +531,7 @@ const resources = {
         loginAndReserve: 'احجز',
         manageTitle: 'إدارة الحجوزات',
         yourReservations: 'حجوزاتك',
-        noReservations: 'ليس لديك أي حجوزات للمعايير المحددة.',
+        noReservations: 'ليس لديك أي حجوزات.',
         confirmCancel: 'تأكيد الإلغاء',
         cancelWarning: 'هل أنت متأكد من إلغاء هذا الحجز؟ لا يمكن التراجع عن هذا الإجراء.',
         cancelReservation: 'إلغاء الحجز',
@@ -543,7 +544,8 @@ const resources = {
         place: 'المكان',
         totalPrice: 'السعر الإجمالي',
         selectDateRange: 'اختر نطاق تاريخ لعرض الحجوزات',
-        cannotCancelNotice: 'الالغاء غير ممكن (تم الغاءه مسبقا او حجز قديم)'
+        cannotCancelNotice: 'الالغاء غير ممكن (تم الغاءه مسبقا او حجز قديم)',
+        dateNote: 'يمكن البحث في اخر 30 يوم فقط'
       },
 
       // Contact

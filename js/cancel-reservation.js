@@ -67,15 +67,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Show reservations container
   showElement(reservationsContainer);
   
-  // Set default date range (last 30 days to next 30 days)
   const today = new Date();
-  const thirtyDaysAgo = new Date(today);
-  thirtyDaysAgo.setDate(today.getDate() - 30);
-  const thirtyDaysFromNow = new Date(today);
-  thirtyDaysFromNow.setDate(today.getDate() + 30);
+  const todayDate = new Date(today);
+  const tomorrowDate = new Date(today);
+  tomorrowDate.setDate(today.getDate() + 1);
   
-  fromDateInput.value = thirtyDaysAgo.toISOString().split('T')[0];
-  toDateInput.value = thirtyDaysFromNow.toISOString().split('T')[0];
+  fromDateInput.value = todayDate.toISOString().split('T')[0];
+  toDateInput.value = tomorrowDate.toISOString().split('T')[0];
   
   // Update status filter options with localized text
   function updateStatusFilterOptions() {
@@ -96,7 +94,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.addEventListener('languageChanged', updateStatusFilterOptions);
   
   // Load initial reservations
-  await loadReservations();
+  await loadReservations(todayDate.toISOString().split('T')[0], tomorrowDate.toISOString().split('T')[0] , '');
   
   // Event Listeners
   filterReservationsBtn.addEventListener('click', async () => {
@@ -117,10 +115,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
   
   clearFilterBtn.addEventListener('click', () => {
-    fromDateInput.value = thirtyDaysAgo.toISOString().split('T')[0];
-    toDateInput.value = thirtyDaysFromNow.toISOString().split('T')[0];
+    fromDateInput.value = todayDate.toISOString().split('T')[0];
+    toDateInput.value = tomorrowDate.toISOString().split('T')[0];
     statusFilterSelect.value = '';
-    loadReservations();
+    loadReservations(fromDateInput.value, toDateInput.value, statusFilterSelect.value);
   });
   
   // Cancel reservation confirmation
@@ -140,14 +138,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   async function loadReservations(fromDate = null, toDate = null, status = '') {
     try {
       // Show loading state
-      reservationsList.innerHTML = '<p class="no-results">Loading reservations...</p>';
+      reservationsList.innerHTML = `<p class="no-results">${i18next.t('common.loading')}</p>`;
       
       const { data: { session } } = await supabase.auth.getSession();
       const token = session?.access_token;
       
       // Build URL with query parameters
       const url = new URL(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/player-reservations`);
-      
+      console.log('from: ' + fromDate + ' to: ' + toDate);
       if (fromDate && toDate) {
         url.searchParams.append('from_date', fromDate);
         url.searchParams.append('to_date', toDate);
@@ -171,8 +169,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const reservations = await response.json();
       
       if (!reservations || reservations.length === 0) {
-        showElement(noReservationsMessage);
-        reservationsList.innerHTML = '';
+        reservationsList.innerHTML = `<p class="no-results">${i18next.t('reservation.noReservations')}</p>`;
         return;
       }
       
